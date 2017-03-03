@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<input type="text" name="text" id="text" value="" placeholder="请输入内容" />
+		<span id="tips"></span>
+		
+		<script type="text/javascript">
+		
+			var oText = document.getElementById("text");
+			var oTips = document.getElementById("tips");
+			
+			
+			var onoff = false;
+			oText.oninput=function(){//input事件是在输入的时候同时去做什么事情
+				
+				var reg = /\d+/g;//表示是数字就行
+				var reg2 = /1|3|5|7+/g;
+				
+				if( reg.test( oText.value ) ){//表示是数字
+					var str = oText.value.trim();//去掉空格后的字符串
+					var arr = str.match( reg );
+					str = arr.join("");
+					str = str.replace( reg2,function( $0 ){
+						return "*";
+					})
+					
+//					console.log(str);
+					onoff=false; 
+					
+				}else{//表示 输入的不是数字
+					onoff=true;
+				}
+				
+				if(onoff){
+					oTips.innerHTML = "没有输入数字";
+				}else{
+					oTips.innerHTML = str;
+				}
+			
+			}
+			
+			
+		</script>
+		
+	</body>
+</html>
