@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,
+			ul,
+			li,
+			h2 {
+				margin: 0;
+				padding: 0;
+			}
+			
+			li {
+				list-style: none;
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="qq.css" />
+	</head>
+
+	<body onselectstart="return false;">
+		<div class="wrap">
+			<div class="list">
+				<h2><span></span>我的好友</h2>
+				<ul>
+					<li>小佳Love</li>
+					<li>从来就是这么正经</li>
+					<li>leo是个胖子</li>
+					<li>momo不是陌陌</li>
+				</ul>
+				<h2><span></span>企业好友</h2>
+				<ul>
+					<li>习近平</li>
+					<li>普京</li>
+					<li>奥巴马</li>
+				</ul>
+				<h2><span></span>黑名单</h2>
+				<ul>
+					<li>安倍</li>
+					<li>杜特尔特</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	
+	<script>
+		var oList = document.getElementsByClassName('list')[0];
+		var oH2 = oList.getElementsByTagName('h2');
+		var oUl = oList.getElementsByTagName('ul');
+//		var oLi = document.getElementsByTagName('ul');
+		var oLi = document.querySelectorAll("ul li");
+		var last=0;//表示h2的上一个
+		var lastLi=0;//表示li移入事件的上一个
+		var lastSelect=0;//表示li点击事件的上一个
+		//h2的点击事件
+		for(var i=0;i<oH2.length;i++){
+			
+			oH2[i].onOff=true;//给每个h2添加开关,true对应没有class
+			oH2[i].index=i;//添加索引
+			
+			oH2[i].onclick=function(){//给每个h2添加点击事件
+				
+				if(this.onOff){
+					
+					oH2[last].className="";//上一个h2清空class
+					oUl[last].style.display="none";//上一个h2对应的ul隐藏
+					
+					oH2[last].onOff=true;//上一个的开关也要变化成没有class的状态
+					last=this.index;
+					
+					this.className="active";//当前h2添加class
+					oUl[this.index].style.display="block";//当前h2对应的ul显示
+					
+				}else{
+					this.className="";
+					oUl[this.index].style.display="none";
+				}
+				this.onOff=!this.onOff;
+			}			
+		}
+		//给所有的li添加鼠标移入、移出和点击事件
+		for(var i=0;i<oLi.length;i++){
+			//需要给每一个li添加开关
+			oLi[i].onOff=true;//表示没有active和selected
+			oLi[i].index=i;
+			
+			oLi[i].onmouseover=function(){
+				//先判断上一个的状态,清空上一个的active状态
+				if(oLi[lastLi].onOff){
+					oLi[lastLi].className="";
+				}
+				//判断当前li的状态
+				if(this.onOff){
+					this.className="active";
+				}
+				lastLi=this.index;
+				
+				//console.log( oLi[0].onOff,oLi[1].onOff,oLi[2].onOff,oLi[3].onOff );
+			}
+//			
+//			oLi[i].onmouseout=function(){
+//				if(this.onOff){
+//					this.className="";
+//				}
+//			}
+			
+			oLi[i].onclick=function(){
+				//上一个的li的点击状态清空,并且把上一个li的开关改变
+				oLi[lastSelect].className="";
+				oLi[lastSelect].onOff=true;
+				//给当前li添加class，并将对应的开关改变
+				this.className="selected";
+				this.onOff=false;
+				
+				lastSelect=this.index;
+				//console.log( oLi[0].onOff,oLi[1].onOff,oLi[2].onOff,oLi[3].onOff );
+			}
+			
+		}
+			
+		
+		
+	</script>
+</html>

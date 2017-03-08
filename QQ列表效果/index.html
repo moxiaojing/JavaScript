@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,
+			ul,
+			li,
+			h2 {
+				margin: 0;
+				padding: 0;
+			}
+			
+			li {
+				list-style: none;
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="qq.css" />
+	</head>
+
+	<body onselectstart="return false;">
+		<div class="wrap">
+			<div class="list">
+				<h2><span></span>我的好友</h2>
+				<ul>
+					<li>小佳Love</li>
+					<li>从来就是这么正经</li>
+					<li>leo是个胖子</li>
+					<li>momo不是陌陌</li>
+				</ul>
+				<h2><span></span>企业好友</h2>
+				<ul>
+					<li>习近平</li>
+					<li>普京</li>
+					<li>奥巴马</li>
+				</ul>
+				<h2><span></span>黑名单</h2>
+				<ul>
+					<li>安倍</li>
+					<li>杜特尔特</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	
+	<script>
+		var oList = document.getElementsByClassName('list')[0];
+		var oH2 = oList.getElementsByTagName('h2');
+		var oUl = oList.getElementsByTagName('ul');
+//		var oLi = document.getElementsByTagName('ul');
+		var oLi = document.querySelectorAll("ul li");
+		
+		var last=0;//初始化上一个h2
+		var lastLi=0;//初始化上一个li
+		var lastSelect = 0;//li点击事件的上一个
+		//分组的点击事件（h2）
+		for(var i=0;i<oH2.length;i++){
+			
+			oH2[i].onOff=true;//给每个h2添加开关
+			oH2[i].index=i;//添加索引
+			oH2[i].onclick=function(){//给每个h2添加点击事件
+			
+				if(this.onOff){
+					//全部清空
+					for(var i=0;i<oH2.length;i++){
+						oH2[i].className="";
+						oUl[i].style.display="none";
+						oH2[i].onOff=true;
+					}
+				this.className="active";
+				oUl[this.index].style.display="block";
+				
+				}else{
+					this.className="";
+					oUl[this.index].style.display="none";
+				}
+				this.onOff=!this.onOff;
+
+			}
+				
+		}
+		
+		for(var i=0; i<oLi.length; i++){
+			oLi[i].flag=true;//为每一个li添加一个开关属性,true表示没有class
+			oLi[i].index=i;//为每一个li添加索引值
+			oLi[i].onmouseover=function(){
+				if(oLi[lastLi].flag){
+					oLi[lastLi].className="";	
+				}
+				if(this.flag){//表示开关为true的时候，没有class
+					this.className="active";
+				}
+				
+				lastLi=this.index;
+			}
+			
+			oLi[i].onclick=function(){
+				oLi[lastLi].flag=true;
+				oLi[lastSelect].className="";
+				oLi[lastSelect].flag=true;
+				this.className="selected";
+				this.flag=false;
+				lastSelect=this.index;
+			}
+			
+			oLi[i].onmouseout=function(){
+				if(this.flag){
+					this.className="";
+				}
+				
+			}
+		}
+		
+	</script>
+</html>

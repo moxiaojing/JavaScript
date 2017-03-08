@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,
+			ul,
+			li,
+			h2 {
+				margin: 0;
+				padding: 0;
+			}
+			
+			li {
+				list-style: none;
+			}
+			li:hover,h2:hover{
+				cursor: pointer;
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="qq.css" />
+	</head>
+
+	<body onselectstart="return false;">
+		<div class="wrap">
+			<div class="list">
+				<h2><span></span>我的好友</h2>
+				<ul>
+					<li>小佳Love</li>
+					<li>从来就是这么正经</li>
+					<li>leo是个胖子</li>
+					<li>momo不是陌陌</li>
+				</ul>
+				<h2><span></span>企业好友</h2>
+				<ul>
+					<li>习近平</li>
+					<li>普京</li>
+					<li>奥巴马</li>
+				</ul>
+				<h2><span></span>黑名单</h2>
+				<ul>
+					<li>安倍</li>
+					<li>杜特尔特</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<!--
+		思路：
+			1，获取元素
+			2，给所有的h2添加点击事件处理函数，并给每个h2添加开关
+				如果点击的h2有class(开关为true),那么就把class去掉
+				如果点击的h2没有class(开关为false),就添上class
+			3，给每一个li添加开关，只有当点击事件发生时，开关才变化，移入和移出时，开关不变，
+				所以只要是初始化的开关状态，就可以写移入和移出事件
+				当开关为true时候，
+					点击事件-----有class（selected）
+				当开关为false时候；
+					点击事件-----没有class
+	-->
+	<script>
+		var oList = document.getElementsByClassName('list')[0];
+		var oH2 = oList.getElementsByTagName('h2');
+		var oUl = oList.getElementsByTagName('ul');
+//		var oLi = document.getElementsByTagName('ul');
+		var oLi = document.querySelectorAll("ul li");
+		
+		
+		//给所有h2添加点击事件
+		for(var i=0;i<oH2.length;i++){
+			
+			oH2[i].onOff=false;//false对应没有class，ul隐藏，true对应有class，ul显示
+			oH2[i].index=i;
+			
+			oH2[i].onclick=function(){
+				//除了当前点击的h2,其他都去掉class
+				for(var i=0;i<oH2.length;i++){
+					if(i!=this.index){//如果点击的不是当前h2，就去掉其他所有的class
+						oH2[i].className="";
+						oUl[i].style.display="none";
+						oH2[i].onOff=false;
+					}
+				}
+				
+				//给当前h2状态取反	
+				if(!this.onOff){
+					this.className="active";
+					oUl[this.index].style.display="block";
+				
+				}else{	
+					this.className="";
+					oUl[this.index].style.display="none";
+				}
+					this.onOff=!this.onOff;
+			}
+		}
+		
+		
+		//给所有li添加鼠标移入 、移出、点击 事件
+		for(var i=0;i<oLi.length;i++){
+			oLi[i].index=i;
+			oLi[i].onOff=false;//false对应没有class，没有selected
+			
+			//鼠标移入事件
+			oLi[i].onmouseover=function(){
+//				this.onOff=!this.onOff;
+				if(this.onOff==false){
+				
+					this.className = "active";//若没有class，就添加class（active）	
+				}
+				
+			}
+			
+			//li点击事件
+			oLi[i].onclick=function(){
+				//清除全部
+				for(var i=0;i<oLi.length;i++){
+					oLi[i].className = "";
+					oLi[i].onOff=false;
+				}
+				this.className = "selected";
+				this.onOff=true;
+//				console.log(oLi[i].onOff)
+			}
+			
+			
+			//鼠标移出事件
+			oLi[i].onmouseout=function(){
+//				this.onOff=!this.onOff;
+				if(this.onOff==false){
+					this.className = "";//若有class，就去掉class
+				}
+				
+				
+			}
+		}
+		
+			
+		
+		
+	</script>
+</html>

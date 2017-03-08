@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			div{
+				width:100px;
+				height:100px;
+				background:red;
+				float:left;
+				margin-right:10px;
+				font-size:40px;
+				}
+				.active{
+					background:blue;
+				}
+		</style>
+	</head>
+	<body>
+		<div>关</div>
+		<div>关</div>
+		<div>关</div>
+		<script>
+			
+			var divs=document.getElementsByTagName('div');
+			
+			for(var i=0;i<divs.length;i++){
+				divs[i].onOff=true;
+				divs[i].onclick=function(){
+					
+					if(this.onOff){
+						
+						for(var i=0;i<divs.length;i++){
+							divs[i].className='';
+							divs[i].innerHTML='关';
+							divs[i].onOff=true;
+						}
+						
+						this.className='active';
+						this.innerHTML='开';
+						
+					}else{
+						this.className='';
+						this.innerHTML='关';
+					}
+					this.onOff=!this.onOff;
+					console.log(this.onOff);
+				}
+				
+			}
+			
+		</script>
+		
+	</body>
+</html>

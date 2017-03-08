@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,
+			ul,
+			li,
+			h2 {
+				margin: 0;
+				padding: 0;
+			}
+			
+			li {
+				list-style: none;
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="qq.css" />
+	</head>
+
+	<body onselectstart="return false;">
+		<div class="wrap">
+			<div class="list">
+				<h2><span></span>我的好友</h2>
+				<ul>
+					<li>小佳Love</li>
+					<li>从来就是这么正经</li>
+					<li>leo是个胖子</li>
+					<li>momo不是陌陌</li>
+				</ul>
+				<h2><span></span>企业好友</h2>
+				<ul>
+					<li>习近平</li>
+					<li>普京</li>
+					<li>奥巴马</li>
+				</ul>
+				<h2><span></span>黑名单</h2>
+				<ul>
+					<li>安倍</li>
+					<li>杜特尔特</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	
+	<script>
+		var oList = document.getElementsByClassName('list')[0];
+		var oH2 = oList.getElementsByTagName('h2');
+		var oUl = oList.getElementsByTagName('ul');
+//		var oLi = document.getElementsByTagName('ul');
+		var oLi = document.querySelectorAll("ul li");
+		var last=0;//表示h2的上一个
+		var lastLi=0;//表示li移入事件的上一个
+		var lastSelect=0;//表示li点击事件的上一个
+		
+		//h2的点击事件
+		
+		for(var i=0;i<oH2.length;i++){
+			
+			oH2[i].onOff=false;//给每个h2添加开关,false对应没有class,true对应选中状态
+			oH2[i].index=i;//添加索引
+			
+			oH2[i].onclick=function(){//给每个h2添加点击事件
+			
+				//给当前的h2添加active
+				
+				if(this.onOff==false){//也可以写成if(!this.onOff)
+					//在给当前h2添加class之前要清空上一个的状态
+					
+					oH2[last].className="";
+					oUl[last].style.display="none";
+					oH2[last].onOff=false;
+					last=this.index;
+					
+					this.className="active";
+					oUl[this.index].style.display="block";
+				}else{
+					
+					this.className="";
+					oUl[this.index].style.display="none";
+				}
+				this.onOff=!this.onOff;
+				
+//				console.log(oH2[0].onOff,oH2[1].onOff,oH2[2].onOff);
+			}	
+		}		
+		
+		//给每个li添加移入，移出，点击事件
+		for( var i=0;i<oLi.length;i++){
+			oLi[i].onOff=false;//表示li的没有被选中的状态
+			oLi[i].index=i;//表示给每个li添加一个索引值
+			
+			//li的点击事件
+			oLi[i].onclick=function(){
+				//清空上一个
+					oLi[lastSelect].className="";
+					oLi[lastSelect].onOff=false;
+					
+					lastSelect=this.index;
+					this.className="selected";
+					this.onOff=true;
+					
+			console.log(oLi[0].onOff,oLi[1].onOff,oLi[2].onOff,oLi[2].onOff,oLi[3].onOff,oLi[4].onOff,oLi[5].onOff);
+			}
+			
+			//li的鼠标移入事件
+			oLi[i].onmouseover=function(){
+				
+				if(this.onOff==false){
+					this.className="active";
+				}
+				
+			}
+			
+			//li的鼠标移出事件
+			oLi[i].onmouseout=function(){
+				if(this.onOff==false){
+					this.className="";
+				}
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+		}
+		
+		
+	</script>
+</html>
