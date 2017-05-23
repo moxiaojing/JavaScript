@@ -1,0 +1,90 @@
+﻿获取元素
+	getElementById
+	getElementsByTagName
+				
+				
+getElementsByClassName  ie6,7，8不支持
+querySelector           ie6,7不支持
+querySelectorAll	ie6,7不支持
+
+元素
+DOM的兼容性是特别的多的
+	children
+	    所有浏览器都支持，不是标准下的方法
+	childNodes - children
+	    在标准下会包含非元素类型的节点
+	    在非标准ie下只包含元素类型的节点
+	firstChild - firstElementChild
+	    firstChild - firstElementChild标准下都有，只是firstChild会包含非元素类型的节点，而firstElementChild只包含元素类型的节点
+	    在非标准下是没有firstElementChild
+	和firstChild类似的还有
+	    lastChild - lastElementChild
+	    nextSibling - nextElementSibling
+	    previousSibling - previousElementSibling
+
+事件
+事件绑定
+	对象.on事件名称=函数
+
+	标准下
+	对象.addEventListener(事件名称，函数，是否捕获)
+	对象.removeEventListener(事件名称，函数，是否捕获)
+	非标准ie下
+	对象.attachEvent(事件名称，函数)
+	对象.detachEvent(事件名称，函数)
+
+	addEventListener / detachEvent
+	addEventListener
+		1.事件名称不用带on
+		2.顺序绑定，顺序执行 - 队列
+		3.支持捕获模式
+		4.事件函数中的this指向触发该事件的对象
+
+	detachEvent
+		1.事件名称需要带on
+		2.顺序绑定，倒序执行 - 栈
+		3.不支持捕获模式
+		4.事件函数中的this指向window
+事件对象
+事件对象的兼容
+	标准下：
+	    事件对象是通过事件函数的第一个参数传入的，如果是一个函数是被事件调用的，
+	    那么这个函数的第一个参数就是事件对象
+	非标准ie下：
+	    事件是全局的
+	    chrome也支持全局的event，但是firefox不支持
+	准ie和chrome
+	    事件函数的参数传入+全局event
+	标准ie
+	    支持全局event
+	标准
+	    事件函数的参数传入
+
+阻止冒泡
+	e.cancelBubble
+	   和children很像，不是标准方法，但是没个浏览器都支持
+	标准推荐使用
+	   e.stopPropagation()来阻止冒泡，但是这个方法非标准ie是不支持的
+
+阻止默认行为
+	return false
+	但是这个方法只能在DOM1事件模型中使用
+	   对象.on事件名称=函数
+	才能阻止事件默认行为
+
+	如果事件是通过addEventListener（DOM2事件模型）来绑定，那么需要使用
+	   e.preventDefault()
+	来阻止默认行为
+
+事件源
+	标准：
+		ev.target
+	非标准ie：
+		ev.srcElement
+
+		var target = ev.target || ev.srcElement;
+
+ajax
+	XMLHttpRequest
+    ActiveXObject('Microsoft.XMLHTTP')
+    没有onload，使用onreadystatechange

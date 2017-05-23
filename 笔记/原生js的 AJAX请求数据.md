@@ -3,7 +3,7 @@
 标签（空格分隔）： 原生js的AJAX 
 
 ---
-
+AJAX即“Asynchronous Javascript And XML”（异步JavaScript和XML），是指一种创建交互式网页应用的网页开发技术。
 ##1 AJAX的组成
 
 AJAX是一种创建交互式网页应用的网页开发技术
@@ -15,6 +15,18 @@ form表单中form标签有一个action和method属性
 
         action: 提交地址
         method：提交方式（动作，方法）
+            get
+    			数据放在地址的?后面的，格式是
+    				key=value
+    				key=value&key=value
+    			因为浏览器缓存地址，不安全
+    			
+    浏览器对地址栏中的字符有限制，所以如果get的数据超出了浏览器对地址的字符限制，那么会导致发送的数据不完整
+    
+    		post
+    			在系统后台发送
+    			相对安全
+    			理论上不限制大小，服务器那边限制大小
         
 表单控件的name值是前端和后端约定好的，代表一个有意义的属性
 
