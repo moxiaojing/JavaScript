@@ -1,13 +1,11 @@
-﻿# 浏览器兼容性
+﻿# JavaScript中如何处理浏览器兼容性
 
-标签（空格分隔）： 浏览器兼容性
+标签（空格分隔）： js处理浏览器兼容性
 
 ---
-使用jQuery 避免兼容
+常用的 jQuery可以避免兼容性问题
 
-
-
-##1 检测该浏览器是不是支持某个方法
+##1、 检测该浏览器是不是支持某个方法
 
 用if判断语句
 ```
@@ -19,57 +17,70 @@ if(document.fangfa){
 }
 
 ```
-##2 获取元素的css样式，不是行间样式
+##2、 获取元素
+###获取元素
+    全兼容：
+        getElementById
+    	getElementsByTagName
+				
+	部分兼容：			
+        getElementsByClassName  ie6,7，8不支持
+        querySelector           ie6,7不支持
+        querySelectorAll	ie6,7不支持
+    
+###获取元素的css样式，不是行间样式
 
     高版本使用 
         window.getComputedStyle 获取,返回值是一个对象 
+        
     低版本使用
         element.currentStyle 获取,
         
 ----------------------------------
-##3 浏览器内核
+##3、 主流浏览器内核
 
-IE内核----trident 
-chrome----gecko
-苹果系统--webkit
+    IE内核----Trident 
+    Firefox内核----Gecko
+    苹果系统Safari和Chrome内核----Webkit
+    Opera内核------Presto
 
 -----------------------------------------
-##4 DOM ---属性
+##4、 DOM ---属性
 
-firstElementChild---不兼容，ie9（包含ie9）以上
-firstChild----返回第一个子节点
-在高版本浏览器中，会获取第一个子节点--空白文本节点#text（回车或空格造成的）
-在低版本浏览器中，会获取第一个元素子节点
+    firstElementChild---不兼容，ie9（包含ie9）以上兼容
+    
+    firstChild----返回第一个子节点
+    在高版本浏览器中，会获取第一个子节点--包括-空白文本节点#text（回车或空格造成的）
+    在低版本浏览器中，会获取第一个元素子节点
 
-childNodes---标准，但不兼容，某个元素下的所有子节点，包括文本节点和元素节点
+    childNodes---标准，但不兼容，某个元素下的所有子节点，包括文本节点和元素节点
 
-children---非标准，全兼容，只获取元素节点
+    children---非标准，全兼容，只获取元素节点
 
 
 ---------------------------------------
 
-##5 BOM方法--和--DOM方法
+##5、 BOM方法--和--DOM方法
 
     BOM方法  --- window.方法
 
-window.innerWidth---可视区域的宽度
-
+    window.innerWidth---可视区域的宽度
+    
     DOM方法 ---- document.方法
 
-document.document.clientWidth---可视区域的宽度
-
-pageYOffset-----设置或返回当前页面相对于窗口显示区域左上角的Y位置
-
-
-    有兼容性
-   
-    document.documentElement.scrollTop----页面向上偏移了多少高度，chrome下是0
+    document.document.clientWidth---可视区域的宽度
+    
+ pageXOffset 设置或返回当前页面相对于窗口显示区左上角的 X 位置。
+ pageYOffset 设置或返回当前页面相对于窗口显示区左上角的 Y 位置。
+ 有兼容性，ie8及以下浏览器不支持，可以替换为：
+ 
+    document.documentElement.scrollTop/scrollLeft----页面向上/左 偏移了多少，chrome下是0
      
-    document.body.scrollTop----页面向上偏移了多少高度，ie下面是0
+    document.body.scrollTop/scrollLeft----页面向上/左 偏移了多少，ie下面是0
     
+   
     
-    
-##6 Event对象---事件出发后的信息
+##6、 Event对象---事件出发后的信息
 
 高版本
 事件对象---作为事件处理函数的第一个参数
@@ -95,18 +106,32 @@ btn.onclick = function(ev){
 
 }
 ```
-##7 绑定事件处理函数
+##7、 绑定事件处理函数
 
-高版本使用
+高版本（含ie10）使用***addEventListener***
+
+		1.事件名称不用带on
+		2.顺序绑定，顺序执行 - 队列
+		3.支持捕获模式
+		4.事件函数中的this指向触发该事件的对象
 ```
 element.addEventListener(evName,evFn,true|false)-----是否捕获
 ```
+    
 
-低版本（ie6 7 8 9 支持，但是ie10不支持）
+低版本（ie6、7、8、9 ）***detachEvent***
+
+		1.事件名称需要带on
+		2.顺序绑定，倒序执行 - 栈
+		3.不支持捕获模式
+		4.事件函数中的this指向window
+
 ```
 element.attachEvent(on+evName,evFn)---只有冒泡节点
 ```
-
+   
+	
+		
 事件处理函数中的this----指向window,不指向事件触发元素
 
 绑定多个事件处理函数，执行顺序是倒序的，后写的先执行
@@ -146,14 +171,14 @@ function on(element,evName,evFn,boolean){
 ```
 
 
-##8 解绑事件处理函数
+##8、 解绑事件处理函数
 
 addEventListener-----removeEventListener
 attachEvent-----------detachEvent
 
 由attachEvent绑定的事件处理函数，不能解绑，因为匿名函数不能解绑
 
-##9 滚轮事件
+##9、 滚轮事件
 
 mousewheel -----  ie、chrome --- 在document上 用on绑定
     事件对象属性 wheelDelta
@@ -170,7 +195,7 @@ function wheelFn(ev){
 }
 ```
     
-##10    阻止冒泡和默认事件
+##10、    阻止冒泡和默认事件
 ###阻止浏览器默认行为
     
     通过 addEventListener（DOM2事件模型）来绑定，那么需要使用
@@ -186,7 +211,7 @@ function wheelFn(ev){
 	event.stopPropagation()
 	    标准推荐使用,但是这个方法非标准ie是不支持的
 
-##11    事件源
+##11、    事件源
 	标准：
 		ev.target
 		
@@ -197,13 +222,13 @@ function wheelFn(ev){
 var target = ev.target || ev.srcElement;
 ```
 
-##12    AJAX对象
+##12、    AJAX对象
 
 标准：
 ```
 new XMLHttpRequest();
 ```
-监控ajax状态：
+监控ajax状态用 onload：
 ```
 var xhr = new XMLHttpRequest();
 xhr.onload = function(){ }
@@ -213,13 +238,13 @@ ie6低版本:
 ```
 new ActiveXObject("Microsoft.XMLHTTP");
 ```
-监控ajax状态：
+监控ajax状态使用 onreadyStatechange：
 ```
 var xhr = new ActiveXObject("Microsoft.XMLHTTP");
  xhr.onreadyStatechange = function(){  }
 ```
 
-   
+
    
    
    
