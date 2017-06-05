@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.box{
+				position:absolute;
+				border:1px solid #000;
+				/*border-radius: 50%;*/
+			}
+			#aa{
+				width:400px;
+				height:400px;
+				background: pink;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="aa"></div>
+		<script type="text/javascript">
+			document.onmousedown=function(e){
+				var divX=e.clientX;//表示div的left的起始位置
+				var divY=e.clientY;//表示div的top的起始位置
+				
+				var div=document.createElement("div");
+				div.className="box";
+				div.style.left=divX+"px";
+				div.style.top=divY+"px";
+				document.body.appendChild(div);
+				
+				document.onmousemove=function(e){
+					var divW=e.clientX-divX;//div的width
+					var divH=e.clientY-divY;//div的height
+					div.style.height = Math.abs(divH)+"px";//有正负，所以用绝对值就好
+					div.style.width = Math.abs(divW)+"px";
+					//div的left值其实是哪个数小，就是那个
+					div.style.left = ( e.clientX < divX ? e.clientX : divX )+"px";
+					div.style.top=( e.clientY < divY ? e.clientY : divY )+"px";
+					
+				}
+				document.onmouseup=function(){
+					document.onmousemove=null;
+				}
+				
+			}
+		</script>
+	</body>
+</html>
