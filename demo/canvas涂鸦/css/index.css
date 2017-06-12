@@ -1,0 +1,23 @@
+
+.canvas {
+  width:300px;
+  margin: 50px auto;
+  background: #FFF;
+  box-shadow: 0 0 3px rgba(0,0,0,.4);
+}
+#canvas {
+  display: block;
+  cursor: crosshair;/*鼠标是十字*/
+
+}
+.controls {
+  display: block;
+  width: 300px;
+  line-height: 55px;
+  margin: auto;
+  text-align: center;
+}
+.control {
+  max-width: 90px;
+  vertical-align: middle;
+}
