@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			body{
+				background: #000000;
+				overflow: hidden;
+			}
+			div{
+				width:60px;
+				height: 60px;
+				background:rgba(255,255,0,0.4);
+				border-radius: 30px;
+				position:absolute;
+				transition:2s ease-out;
+			}
+		</style>
+	</head>
+	<body> 
+		<script type="text/javascript">
+//			var num=0;//用来变换div的颜色
+//			var n=0;
+//			var arrColor=["pink","green","yellow","purple","red","blue"];
+//			var sum=0;
+//			document.onmousemove = function(ev){
+////				n++;
+////				if( n % (arrColor.length)*2 == 0 ){//也就是n和arrColor的值相等，执行后面的代码，
+////					目的是让div和div的间隙变大一些
+//					num++;
+//					num%=arrColor.length;
+//					var box=document.createElement("div");
+//										
+////					box.style.left=( ev.clientX-box.offsetWidth/2 )+"px";//圆心和鼠标重合
+////					box.style.top=( ev.clientY-box.offsetHeight/2 )+"px";//圆心和鼠标重合
+//
+//					box.style.left=( ev.clientX-30 )+"px";//圆心和鼠标重合
+//					box.style.top=( ev.clientY-30 )+"px";//圆心和鼠标重合
+//
+//					box.style.background="white";
+//					box.style.opacity=0.3;
+//					
+//					document.body.appendChild(box);
+//					sum++
+//					setTimeout(function(){
+//						box.style.background=arrColor[ num ];
+//						box.style.opacity=1;
+//						box.style.transform="scale(0)";	
+//						box.style.top=( ev.clientY + ( Math.random() - 0.5 ) *800 )+"px";
+//						box.style.left=( ev.clientX + ( Math.random() - 0.5 ) *800 )+"px";
+//						
+////						box.style.transform="translateY(ev.clientX)";
+//						setTimeout(function(){
+//							document.body.removeChild(box);
+//							sum--;
+//						},2000);
+//						
+//					},50);
+//					console.log(sum)
+////				}
+//			}
+			
+			(function(){
+			
+			var menu = document.getElementById("menu");
+			var crts = document.getElementsByClassName("creat");
+			var log = document.getElementById("logo");
+			var color = ["lightgreen","gold","blue","aqua","darkorange","lightcyan","yellow", "orange","deeppink","red"]
+			var num = 0;
+			var timer = null;
+//			log.onmousemove = function(ev){				
+//				ev.cancelBubble = true;				
+//			}
+//			
+			document.onmousemove = function(ev){
+//				num++;
+				var clnX = ev.clientX;
+				var clnY =  ev.clientY;
+				
+				for (var i = 0; i < 5; i++) { //生成div
+					var div =  document.createElement("div");
+					div.className = "creat";					
+//					div.style.left = clnX - (div.offsetWidth/2) + 50*(Math.random()-0.5) +"px";
+//					div.style.top = clnY - (div.offsetHeight/2) + 50*(Math.random()-0.5) +"px";
+
+					
+					div.style.left = clnX - (25)+ 20*(Math.random()-0.5) +"px";
+					div.style.top = clnY - (25)+ 20*(Math.random()-0.5) +"px";
+					
+					div.style.background = "#fff";
+					div.style.zIndex = -1;
+					div.style.opacity = .6;
+					
+					document.body.appendChild(div);	
+				}
+				
+				setTimeout(function(){ //给生成的div添加效果
+					
+					for (var i = 0; i < crts.length; i++) {
+						crts[i].style.opacity = 1;
+						if(!crts[i].onoff){
+							crts[i].onoff = true;
+									
+							crts[i].style.background = color[i%10];
+							crts[i].style.transform = "scale(0)";
+							crts[i].style.left =(Math.random()-0.5)*600 + crts[i].offsetLeft +"px";
+							crts[i].style.top =(Math.random()-0.5)*600 + crts[i].offsetTop +"px";
+						}	
+					}
+				},5)
+				
+				setTimeout(function(){ //删除消失的div
+					for (var i = 0; i < 5; i++) {
+						if(crts[i]){
+							document.body.removeChild(crts[i]);
+						}
+						
+					}
+						
+				},2000)
+			}
+			
+			//旋转
+//			timer = setInterval(function(){
+//				num++;
+//				menu.style.transform = "rotateZ("+ -num*360 +"deg)";
+//			},2000)
+//			
+			
+		})()
+		</script>
+		
+	</body>
+</html>

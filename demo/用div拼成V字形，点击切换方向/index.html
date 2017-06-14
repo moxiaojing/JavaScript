@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body {
+				margin: 0;
+				width: 1000px;
+				height: 800px;
+				margin: 0 auto;
+				background: url(bg.png) no-repeat center center;
+			}
+			
+			.wrap {
+				width: 290px;
+				height: 490px;
+				background: url(bg1.png) no-repeat center center;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				margin: -245px 0 0 -145px;
+				position: absolute;
+				box-shadow: 0 0 8px rgba(0,0,0,.3);
+				border-radius: 5px;
+			}
+			
+			.box {
+				width: 252px;
+				height: 252px;
+				position: absolute;
+				top: 70px;
+				left: 50%;
+				margin-left: -126px;
+			}
+			
+			.btn {
+				width: 114px;
+				height: 36px;
+				border: 1px solid #68bcfa;
+				border-radius: 3px;
+				position: absolute;
+				bottom: 30px;
+				left: 50%;
+				margin-left: -57px;
+				text-align: center;
+				font: 16px/36px arial;
+				color: #68bcfa;
+				cursor: pointer;
+			}
+			.btn:hover {
+				background: #68bcfa;
+				color: #fff;
+			}
+			
+			.box div {
+				width: 50px;
+				height: 50px;
+				background: #fff;
+				text-align: center;
+				line-height: 50px;
+				font-size: 20px;
+				color: #68bcfa;
+				border-radius: 2px;
+				position: absolute;
+				left:100px;
+				top:100px;
+				opacity: 0;
+				border-radius: 15px;
+				transition: 1s;
+			}
+		</style>
+	</head>
+
+	<body onselectstart="return false;">
+		<div class="wrap">
+			<div class="box">
+				<div>1</div>
+				<div>2</div>
+				<div>3</div>
+				<div>4</div>
+				<div>5</div>
+			</div>
+			<div class="btn">生成</div>
+		</div>
+		<script>
+			var oBox = document.getElementsByClassName('box')[0];
+//			console.log(oBox);
+			var oBtn = document.getElementsByClassName('btn')[0];
+			console.log(oBtn);
+			var oDiv = oBox.getElementsByTagName('div');
+//			console.log(oDiv);
+			var num=0;//判断状态
+
+			//向上的V
+			function Up(){
+				
+				for(var i=0;i<oDiv.length;i++){
+					oDiv[i].style.opacity=1;
+//					oDiv[i].style.cssText="left:150px;top:150px;opacity:1";
+					if(i<3){
+						oDiv[i].style.left=50*i+'px';
+						oDiv[i].style.top=50*i+'px';
+						
+					}else{
+						
+						oDiv[i].style.left=50*i+'px';
+						oDiv[i].style.top=200-50*i+'px';
+					}
+				}
+			}
+//			oBtn.onclick=Up;
+
+			//向右的V
+			function Right(){
+				
+				for(var i=0;i<oDiv.length;i++){
+					oDiv[i].style.opacity=1;
+//					oDiv[i].style.cssText="left:150px;top:150px;opacity:1";
+					if(i<3){
+						oDiv[i].style.left=200-50*i+'px';
+						oDiv[i].style.top=50*i+'px';
+						
+					}else{
+						
+						oDiv[i].style.left=50*i+'px';
+						oDiv[i].style.top=50*i+'px';
+					}
+				}
+			}
+//		oBtn.onclick=Right;
+		
+		//向下的V
+		function Down(){
+				
+				for(var i=0;i<oDiv.length;i++){
+					oDiv[i].style.opacity=1;
+//					oDiv[i].style.cssText="left:150px;top:150px;opacity:1";
+					if(i<3){
+//						oDiv[i].style.top=200-50*i+'px';
+//						oDiv[i].style.left=50*i+'px';
+						oDiv[i].style.top=50*(4-i)+'px';
+						oDiv[i].style.left=50*(4-i)+'px';
+						
+					}else{
+						oDiv[i].style.top=200-50*(4-i)+'px';
+						oDiv[i].style.left=50*(4-i)+'px';
+//						oDiv[i].style.top=50*i+'px';
+//						oDiv[i].style.left=50*i+'px';
+					}
+				}
+			}
+		//向左的V
+		function Left(){
+				
+				for(var i=0;i<oDiv.length;i++){
+					oDiv[i].style.opacity=1;
+//					oDiv[i].style.cssText="left:150px;top:150px;opacity:1";
+					if(i<3){
+//						oDiv[i].style.top=50*i+'px';
+//						oDiv[i].style.left=50*i+'px';
+						oDiv[i].style.top=200-50*i+'px';
+						oDiv[i].style.left=50*i+'px';
+					}else{
+						oDiv[i].style.top=200-50*i+'px';
+						oDiv[i].style.left=200-50*i+'px';
+//						oDiv[i].style.left=200-50*i+'px';
+//						oDiv[i].style.top=50*i+'px';
+					}
+				}
+			}
+//		oBtn.onclick=Left;
+			var onOff=true;
+			oBtn.onclick=function(){
+//				oDiv[i].style.opacity=0;
+//				for(var i=0;i<oDiv.length;i++){
+//				
+//					oDiv[i].style.cssText="";
+////					oDiv[i].style.left="100px";
+////					oDiv[i].style.top="100px";
+//				
+//				}
+				
+				if(num==0){
+						
+					Up();
+					
+				}else if(num==1){
+					
+					Right();
+					
+				}else if(num==2){
+					
+					Down();
+					
+				}else if(num==3){
+					
+					Left();
+				}
+				
+				num++;
+				if(num==4){
+					num=0;
+				}
+//				
+			}
+
+			
+		</script>
+	</body>
+
+</html>

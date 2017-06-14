@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			#text{
+				width:300px;
+				height: 300px;
+				background: #68BCFA;
+				line-height: 50px;
+				font-size:28px;
+				font-family: "宋体";
+				/*font-family: blackadder itc;*/
+				word-spacing:10px;
+				font-weight: bold;
+				/*display: none;*/
+			}
+			#text span{
+				/*line-height:30px;*/
+				transition: 0.6s;
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<p id="text"></p>
+		
+		<script type="text/javascript">
+			var oText=document.getElementById("text");
+//			var tex="那一次和你相遇人海里,却让我从此认识了你,彼此一次一次地谈心,给我留下了美好回忆,你就像一道最美的风景,却叫我可望而不可及,现在的我早已不能自己,已经深深的对你着迷,爱 来的太	快,我 无法抗拒,就这样深深地爱上了你，多想对你说声我爱你，又怕你会把我远离，只有把爱藏心里，默默的关心你，多想对你说声我爱你，又怕你会把我远离，我只要简单的爱情，一辈子永远不分离";
+			var tex="在青春的年华里   在芸芸众生中    找到你爱的人    让她也爱你 这便是此生最大的幸福";
+//			var tex=" D f i j f ";
+			var timer=null;
+			var time2r=null;
+			var str="";
+			for(var i=0;i<tex.length;i++){
+				str+="<span></span>"
+			}
+			oText.innerHTML=str;
+			
+			var spans=oText.getElementsByTagName("span");
+			for (var i = 0; i < spans.length; i++) {
+				spans[i].innerHTML="_";
+			}
+			var n=-1;
+			var onOff=false;
+			timer=setInterval(function(){
+				
+//				spans[n+1].style.display="inline-block";
+				n++;
+				if(n == spans.length){
+					clearInterval(timer);
+				}
+				n %= spans.length;
+				spans[n].style.display="inline-block";
+//				spans[n].innerHTML = tex.charAt(n) ;
+//				spans[n+1].style.display="inline-block";
+				timer2=setTimeout(function(){
+					
+					if( tex.charAt(n)==" "){
+						spans[n].innerHTML = "&nbsp";
+					}else{
+						spans[n].innerHTML = tex.charAt(n) ;
+					}
+					
+					if(n == spans.length-1){
+						clearTimeout(timer2);
+					}
+//					
+				},200)	
+			},400)
+			
+		</script>
+	</body>
+</html>

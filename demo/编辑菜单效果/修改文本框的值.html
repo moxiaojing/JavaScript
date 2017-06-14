@@ -1,0 +1,148 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style type="text/css">
+	body{
+		line-height: 20px;
+	}
+	.title{
+		line-height: 25px;
+		text-indent:2em;
+		font-weight: bold;
+		color: white; 
+		font-size: 16px;
+		background-color: #6BA542;
+		width: 300px;
+	}
+	p{
+		margin: 0;
+	}
+	#list{
+		margin: 0;
+		padding: 0;
+		width: 300px;
+	}
+	li{
+		list-style: none;
+		border-top: 2px solid #26D9C7;
+	}
+	img{
+		width: 15px;
+		height: 15px;
+		cursor: pointer;
+	}
+	a{
+		text-decoration: none;
+		color: #429400;
+	}
+	#list p{
+		display: inline;
+	}
+	#list div{
+		
+		display: none;
+	}
+	#list .show{
+		display: block;
+	}
+	
+</style>
+</head>
+
+<body>
+	<p class="title">分类名称</p>
+	<ul id="list">
+		<li>
+			<div class="show">
+				<p>HTML</p>
+				<img src="images/pen.png" alt="点击编辑" title="点击编辑">
+			</div>
+			<div>
+				<input type="text" name="">
+				<a href="javascript:;">确定</a>
+				<a href="javascript:;">取消</a>
+			</div>
+		</li>
+		<li>
+			<div class="show">
+				<p>CSS</p>
+				<img src="images/pen.png" alt="点击编辑" title="点击编辑">
+			</div>
+			<div>
+				<input type="text" name="">
+				<a href="javascript:;">确定</a>
+				<a href="javascript:;">取消</a>
+			</div>
+		</li>
+		<li>
+			<div class="show">
+				<p>JavaScript</p>
+				<img src="images/pen.png" alt="点击编辑" title="点击编辑">
+			</div>
+			<div>
+				<input type="text" name="">
+				<a href="javascript:;">确定</a>
+				<a href="javascript:;">取消</a>
+			</div>
+		</li>
+	</ul>
+	<script type="text/javascript">
+		var oList=document.getElementById('list');
+		var aLi=oList.getElementsByTagName('li');
+		
+		
+		//定义初始化，参数n，代表有n个li
+		function Tab(n){
+			//第n个li里面的第一个div，以及div里面的img和p
+			var aDiv=aLi[n].getElementsByTagName("div");
+			var oImg=aDiv[0].getElementsByTagName("img")[0];
+			var oP=aDiv[0].getElementsByTagName("p")[0];
+			
+			//第n个li里面的第二个div，以及div里面的btn和text
+			var oBtn=aDiv[1].getElementsByTagName("a");
+			var oText=aDiv[1].getElementsByTagName("input")[0];
+			
+			//点击小铅笔
+			
+			oImg.onOff=true;//代表没有aDiv[0]显示，aDiv[1]隐藏
+			oImg.onclick=function(){
+				
+				oText.value="";
+				aDiv[0].className="";
+				aDiv[1].className="show";
+			}
+			//点击确定按钮
+			oBtn[0].onclick=function(){
+				if(oText.value==""){
+					aDiv[0].className="show";
+					aDiv[1].className="";
+				}else{
+					
+					oP.innerHTML=oText.value;
+					
+					aDiv[0].className="show";
+					aDiv[1].className="";
+					
+				}
+				
+			}
+			
+			//点击取消按钮
+			oBtn[1].onclick=function(){
+				oText.value="";
+				aDiv[1].className="";
+				aDiv[0].className="show";
+			}
+		}
+		
+		//获取每一个li
+		for(var i=0;i<aLi.length;i++){
+			Tab(i);//表示将i的值赋给n，即：n=i;
+		}
+		
+		
+	</script>
+</body>
+</html>

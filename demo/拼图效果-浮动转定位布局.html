@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#ul1{
+				margin:0;
+				padding:0;
+				list-style: none;
+				width:400px;
+				height:614px;
+				/*margin:10px auto;*/
+				/*background:url(0.jpg) no-repeat;*/
+				border:5px solid #0000FF;
+				position:relative;
+			}
+			#ul1 li{
+				width:100px;
+				height:100px;
+				background:url(0.jpg) no-repeat;
+				float:left;
+				/*margin:1px;*/
+			}
+		</style>
+	</head>
+	<body>
+		<!--
+			布局转换：float布局 ——>定位布局
+		-->
+		<input type="button" id="btn" value="点击提示"/>
+		<ul id="ul1">
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+			<li>7</li>
+			<li>8</li>
+			<li>9</li>
+			<li>10</li>
+			<li>11</li>
+			<li>12</li>
+			<li>13</li>
+			<li>14</li>
+			<li>15</li>
+			<li>16</li>
+			<li>17</li>
+			<li>18</li>
+			<li>19</li>
+			<li>20</li>
+			<li>21</li>
+			<li>22</li>
+			<li>23</li>
+			<li>24</li>
+		</ul>
+		
+		<script type="text/javascript">
+			var ul1=document.getElementById("ul1");
+			var aLi=document.getElementsByTagName("li");
+			var btn=document.getElementById("btn");
+			var onOff=false;
+			var arrPos = [];//存放li的初始坐标值
+			
+			init();
+			
+			btn.onclick=function(){
+				for( var i=0;i<aLi.length;i++){
+					
+					aLi[i].style.left = arrPos[i].left + "px";
+					
+					aLi[i].style.top = arrPos[i].top + "px";
+					
+					drag ( aLi[i] );
+					
+				}
+			}			
+			
+			function init(){
+				
+				for( var i=0;i<aLi.length;i++){
+					
+					var defaults = {};
+					
+					aLi[i].style.backgroundPosition=-(i%4*100)+"px "+-(Math.floor(i/4)*100)+"px";//4表示一行有4个li
+					
+					aLi[i].style.left = aLi[i].offsetLeft+"px";
+					
+					aLi[i].style.top = aLi[i].offsetTop+"px";
+					
+					defaults.left = aLi[i].offsetLeft;
+					
+					defaults.top = aLi[i].offsetTop;
+					
+					arrPos.push(defaults);
+					
+				}
+				console.log(arrPos);
+				for( var i=0;i<aLi.length;i++){
+					
+					aLi[i].style.position="absolute";
+					
+					aLi[i].style.float="none";
+					
+					drag ( aLi[i] );
+					
+				}
+				
+			}
+			
+			function drag( obj ){//限制范围的拖拽
+//				var maxL = obj.parentNode.getBoundingClientRect().right - obj.offsetWidth;
+//				var maxT = obj.parentNode.getBoundingClientRect().bottom - obj.offsetHeight;
+
+				var maxL = obj.parentNode.getBoundingClientRect().width-obj.offsetWidth;
+				var maxT = obj.parentNode.getBoundingClientRect().height-obj.offsetHeight;
+//				console.log(maxL,maxT);
+				obj.onmousedown = function( e ){
+					var disX = e.clientX - obj.offsetLeft;
+					var disY = e.clientY - obj.offsetTop;
+					obj.style.border="2px solid #000";
+					obj.style.zIndex=2;
+					document.onmousemove = function( e ){
+						var l = e.clientX - disX;
+						var t = e.clientY - disY;
+						
+						if( l < obj.parentNode.offsetLeft){
+							 l = 0;
+						}
+						
+						if( l > (maxL-15) ){
+							l = maxL-15;
+						}
+						if( t < obj.parentNode.offsetTop ){
+							t = 0;
+						}
+						if( t > (maxT-15) ){
+							t = maxT-15;
+						}
+						obj.style.left = l + "px";
+						obj.style.top = t + "px";
+						
+					}
+					document.onmouseup = function(){
+						document.onmousemove = null;
+						obj.style.border="none";
+						obj.style.zIndex=1;
+					}
+					return false;
+				}
+			}
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style type="text/css">
+	body{
+		background-color: #F1F1F1;
+	}
+	ul{
+		margin:0 auto;
+		padding: 0;
+		width: 1208px;
+		position:relative;
+	}
+	li{
+		list-style-type: none;
+		/*float: left;*/
+		/*display: inline-block;*/
+		padding: 10px;
+		/*margin: 0 1px;*/
+		
+		background-color: white;
+		position:absolute;
+		top:50%;
+		left:50%;
+		margin-left:-150px;
+		margin-top:120px;
+		transition: 1s;
+	}
+	ul .active{
+		margin-left:0;
+		margin-top:0;
+	}
+	p{
+		margin: 0;
+		text-align: center;
+		background-color: #F1F1F1;
+		line-height: 40px;
+		font-size: 20px;
+		font-weight: bold;
+	}
+	img{
+		vertical-align: top;
+	}
+	div{
+		margin:0 auto;
+		width: 210px;
+	}
+	div:after{
+		content: '';
+		display: block;
+		clear: both;
+	}
+	a{
+		text-decoration: none;
+		width: 100px;
+		line-height: 40px;
+		display: block;
+		color: white;
+		text-align: center;
+		float: left;
+	}
+	a:nth-child(1){
+		margin-right: 10px;
+		background-color: #2aaf6f;
+	}
+	a:nth-child(2){
+		background-color: #FFA500;
+	}
+	
+</style>
+</head>
+
+<body>
+	<div>
+		<a href="javascript:;">从小到大</a><a href="javascript:;">打乱顺序</a>
+	</div>
+	<ul>
+		<li><img src="img/1.jpg" alt=""><p>1-温馨办公</p></li>
+		<li><img src="img/2.jpg" alt=""><p>2-游戏桌面</p></li>
+		<li><img src="img/3.jpg" alt=""><p>3-汽车摇滚</p></li>
+		<li><img src="img/4.jpg" alt=""><p>4-狭路相逢</p></li>
+		<li><img src="img/5.jpg" alt=""><p>5-棒球小子</p></li>
+		<li><img src="img/6.jpg" alt=""><p>6-球鞋动力</p></li>
+		<li><img src="img/7.jpg" alt=""><p>7-游戏官网</p></li>
+		<li><img src="img/8.jpg" alt=""><p>8-指尖社区</p></li>
+	</ul>
+</body>
+<script type="text/javascript">
+	var oUl=document.getElementsByTagName('ul')[0];
+	var aBtn=document.getElementsByTagName('a');
+	var aLi=document.getElementsByTagName('li');
+	var aP=document.getElementsByTagName('p');
+	var onOff=true;//控制按钮的整体切换
+	var arr=[];
+	
+	function tab(){
+		
+		for(var i=0;i<aLi.length;i++){
+			
+			aLi[i].style.left=(300*(i%4))+"px";
+			aLi[i].style.top=(240*(Math.floor(i/4)))+"px";//Math.floor()向下取整
+			aLi[i].className = "active";
+			
+		}
+		
+	}
+	tab();//初始化
+	
+	aBtn[0].onOff=true;//表示从小到大
+	
+	aBtn[0].onclick = function(){//升序按钮
+		
+		this.innerHTML=this.onOff ? "从大到小" : "从小到大";
+		
+		this.style['background-color'] = this.onOff ? "#f09999" : "#2aaf6f";
+		
+		this.onOff=!this.onOff;
+		
+		tab();
+		
+		change();
+		
+	}
+	
+//	console.log(aBtn[1])
+	aBtn[1].onOff=true;//表示从小到大
+	aBtn[1].onclick = function(){//随机按钮
+//		alert(1)
+		this.style['background-color'] = this.onOff ? "#FF0500" : "#FFA500";
+		this.onOff=!this.onOff;
+		suiji();
+	}
+	
+	function change(){	
+		for(var i=0;i<aP.length;i++){
+			arr.push( parseInt( aP[i].innerHTML.charAt(0) ) );
+		}
+		
+		if(aBtn[0].onOff==true){
+			
+			arr.sort();//（）里面什么都不写，默认从小到大排序
+			
+//			alert(arr);//1,2,3,4,5,6,7,8
+			
+			arrEach();
+			
+		}else{//从大到小
+			
+			arr.reverse();
+			
+//			alert(arr);//8,7,6,5,4,3,2,1
+			
+			arrEach();
+		}
+	}
+	
+	function suiji(){
+		
+		for(var i=0;i<aP.length;i++){
+			
+			arr.push( parseInt( aP[i].innerHTML.charAt(0) ) );
+		}
+		
+		arr.sort(function(){//改变arr里面内容的排列顺序
+			return Math.random()-0.5;//结果是一半正数，一半负数
+		})
+		
+		arrEach();
+	}
+	
+	function arrEach(){//遍历arr的每一项
+//		setTimeout(tab,1000);
+		arr.forEach(function(a,b){//a表示arr中的具体元素，b表示严肃对应的位置
+			
+			console.log(a);
+			
+			aLi[a-1].style.left=(300*(b%4))+"px";
+			aLi[a-1].style.top=(240*(Math.floor(b/4)))+"px";
+			
+		})
+		
+		arr=[];//完成一次之后清空数组
+	}
+</script>
+</html>

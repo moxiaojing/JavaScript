@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<form method="post">
+			<input type="text" id="text1" value="123" />
+			<input type="button" id="btn" value="发送" />
+			<select name="sel">
+				<option value="1">Enter发送</option>
+				<option value="2">ctrl + Enter 发送</option>
+			</select>
+		</form>
+		
+		<ul></ul>
+		
+		<script type="text/javascript">
+		
+			var text1=document.getElementById("text1");
+			var btn=document.getElementById("btn");
+			var form1=document.querySelectorAll("form")[0];
+			var oUl=document.querySelectorAll("ul")[0];
+//			btn.onclick=function(){//点击发送按钮-实现
+//				var li=document.createElement("li");
+//				li.innerHTML=text1.value;
+//				oUl.appendChild(li);
+//			}
+//console.log(form1.sel);
+//console.log(form1.sel.value);
+			document.onkeydown=function(ev){//键盘事件-实现,ev表示时间的详细信息
+//				console.log(ev);
+				if( form1.sel.value=="1" && ev.ctrlKey==false ){
+					
+					if(ev.keyCode==13){
+						var li=document.createElement("li");
+						li.innerHTML=text1.value;
+						oUl.appendChild(li);
+					}
+					return;
+				}
+				
+				if( form1.sel.value=="2" ){
+					if(ev.keyCode==13 && ev.ctrlKey==true){
+						var li=document.createElement("li");
+						li.innerHTML=text1.value;
+						oUl.appendChild(li);
+					}
+					return;
+				}
+				
+			}
+		</script>
+	</body>
+</html>

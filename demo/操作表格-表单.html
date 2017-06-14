@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		form {
+			margin: 10px 0;
+		}
+		
+		td {
+			text-align: center;
+		}
+		
+		.color1 {
+			/*隔行变色，默认状态*/
+			background: peachpuff;
+		}
+		
+		.color2 {
+			/*隔行变色，默认状态*/
+			background: paleturquoise;
+		}
+		
+		.hover {
+			/*移入状态*/
+			background: lightgreen;
+		}
+		
+		.sel {
+			/*选中状态*/
+			background: deeppink;
+		}
+	</style>
+	<script>
+		/*
+		 * 1.通过表单，可以添加数据到表格中显示
+		 * 2.id自动根据已有的最大id值进行累加，删除一条记录的时候
+		 * 3.隔行变色，新增加的行应该也需要隔行变色的
+		 * 4.鼠标移入高亮
+		 * 5.全选/全不选（checkAll和下面的每一个checkbox是有关联的）
+		 * 6.选中变色
+		 * 7.上移/下移
+		 * 8.删除
+		 *
+		 * 9.选做：排序
+		 * */
+	</script>
+</head>
+
+<body>
+	<form>
+		name：<input type="text" name="username" value="小明" />
+		<select name="sex">
+			<option value="">请选择一个性别</option>
+			<option value="男" selected="true">男</option>
+			<option value="女">女</option>
+		</select>
+		age：<input type="text" name="age" value="55" />
+		<input type="button" value="提交" name="sub">
+
+		<!--选做-->
+		<p>
+			<select name="orderName">
+				<option value="">选择一个排序字段</option>
+				<option value="id">编号</option>
+				<option value="age">年龄</option>
+			</select>
+			<select name="orderBy">
+				<option value="">选择一个排序方式</option>
+				<option value="asc">升序</option>
+				<option value="desc">降序</option>
+			</select>
+			<input type="button" value="排序" id="sort" />
+		</p>
+
+	</form>
+	<table border="1" width="100%" id="tab1">
+		<thead style="background:#aaa">
+			<tr>
+				<th>全选 <input type="checkbox" name="checkAll" id="checkAll"></th>
+				<th>编号</th>
+				<th>姓名</th>
+				<th>性别</th>
+				<th>年龄</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+	
+	<script>
+		var data = [{
+			id: 1,
+			name: '刘伟',
+			sex: '男',
+			age: 32
+		}, {
+			id: 2,
+			name: '莫涛',
+			sex: '男',
+			age: 28
+		}, {
+			id: 3,
+			name: '小美',
+			sex: '女',
+			age: 18
+		}];
+		var oTbody = document.getElementById("tab1").tBodies[0];
+		
+		var checkAll = document.getElementById("checkAll"); //全选框
+		var form1 = document.getElementsByTagName("form")[0];
+		var sort = document.getElementById("sort"); //排序按钮
+//			console.log(sort);
+//			console.log(form1);
+		
+/*----------------初始化，生成表格-------------------------------------------*/
+
+		for(var i = 0; i < data.length; i++) {
+			createTr(data[i]);
+		}
+		changeColor();
+
+		function createTr(obj) {
+			var tr = document.createElement("tr");
+
+			var td0 = document.createElement("td");
+			var inp = document.createElement("input");
+			inp.type = "checkbox";
+			
+			td0.appendChild(inp);
+			tr.appendChild(td0);
+//在生成tr和复选框 的时候，就添加点击事件，那么，每次生成的 新的tr 的复选框  都会有点击事件
+			inp.onclick = function() {//每个复选框
+
+				if(this.checked) { //选中状态
+					tr.className = "sel";//sel表示选中
+					var trs = oTbody.getElementsByTagName("tr");
+					for(var i = 0; i < trs.length; i++) {
+//alert(1);
+//console.log(trs[0].cells[0].children[0].checked, trs[1].cells[0].children[0].checked, trs[2].cells[0].children[0].checked);
+						if(trs[i].cells[0].children[0].checked == false) {//表示 tr的复选框  有一个是false，那么全选框就是false
+							checkAll.checked = false;
+							return;//跳出当前事件处理函数
+						}
+					}
+//如果代码没有执行return，那就是  tr的复选框  都循环到了，没有一个是false，  都是true，那么全选框就是true
+					checkAll.checked = true;
+				} else { //取消选中
+					tr.className = "hover";//点击取消的时候，鼠标还是在当前tr身上，所以应该显示鼠标移入时候的状态
+					checkAll.checked = false;//全选为false
+				}
+			}
+
+			var td1 = document.createElement("td");
+			td1.innerHTML = obj.id;
+			tr.appendChild(td1);
+
+			var td2 = document.createElement("td");
+			td2.innerHTML = obj.name;
+			tr.appendChild(td2);
+
+			var td3 = document.createElement("td");
+			td3.innerHTML = obj.sex;
+			tr.appendChild(td3);
+
+			var td4 = document.createElement("td");
+			td4.innerHTML = obj.age;
+			tr.appendChild(td4);
+
+			var td5 = document.createElement("td");
+			var inp0 = document.createElement("input");
+			var inp1 = document.createElement("input");
+			var inp2 = document.createElement("input");
+			inp0.type = "button";
+			inp1.type = "button";
+			inp2.type = "button";
+			inp0.value = "上移";
+			inp1.value = "下移";
+			inp2.value = "删除";
+			td5.appendChild(inp0);
+			td5.appendChild(inp1);
+			td5.appendChild(inp2);
+			tr.appendChild(td5);
+
+			inp0.onclick = function() { //表示上移操作
+				if(tr.previousElementSibling) {
+					oTbody.insertBefore(tr, tr.previousElementSibling);
+				}
+				changeColor();
+			}
+
+			inp1.onclick = function() { //表示下移操作
+				if(tr.nextElementSibling) {
+					oTbody.insertBefore(tr.nextElementSibling, tr);
+				}
+				changeColor();
+			}
+			inp2.onclick = function() { //表示删除操作
+				oTbody.removeChild(tr);
+				
+				//先删除，之后利用for循环，找到剩余的每一个tr，如果删除后剩余的tr是全部选中的，那么checkAll选中；否则，checkAll取消选中
+				var trs=oTbody.getElementsByTagName("tr");
+				for(var i=0;i<trs.length;i++){
+					if(trs[i].cells[0].children[0].checked==false){
+						checkAll.checked=false;
+						return;
+					}
+				}
+				checkAll.checked=true;
+			}
+
+			oTbody.appendChild(tr);
+
+			tr.onmouseover = function() {//鼠标移入
+				if(inp.checked) {
+					tr.className = "sel";
+				} else {
+					tr.className = "hover";
+				}
+			}
+
+			tr.onmouseout = function() {//鼠标移出
+				if(inp.checked) {//如果是选中的，那么鼠标移出之后应该还是选中的class
+					tr.className = "sel";
+				} else {//否则，就是原来默认的class，用的是添加的自定义属性
+					tr.className = tr.oriColor;
+				}
+			}
+
+		}
+		/*------隔行变色-----------------------------------------------*/
+
+		function changeColor() {
+			var aTr = oTbody.getElementsByTagName("tr");
+			for(var i = 0; i < aTr.length; i++) {
+				
+				if(i % 2) { //隔行变色，添加自定义属性oriColor，表示默认状态下的颜色值
+					aTr[i].oriColor = "color1";
+				} else {
+					aTr[i].oriColor = "color2";
+				}
+
+				if(i % 2) {//改变className，隔行变色
+					aTr[i].className = "color1";
+				} else {
+					aTr[i].className = "color2";
+				}
+
+				if(aTr[i].cells[0].children[0].checked == true) {//如果某一个没有被选中
+					aTr[i].className = "sel";//那就添加 代表 选中的class
+				} else {//没有选中，执行默认状态的颜色
+					if(i % 2) {
+						aTr[i].className = "color1";
+					} else {
+						aTr[i].className = "color2";
+					}
+				}
+
+			}
+		}
+		/*--------全选和反选----------------------------------------------------*/
+		checkAll.onclick=function(){
+			var trs=oTbody.getElementsByTagName("tr");//tbody里面的所有tr
+			if(this.checked){
+				for(var i=0;i<trs.length;i++){
+					trs[i].cells[0].children[0].checked=true;
+				}
+			}else{
+				for(var i=0;i<trs.length;i++){
+					trs[i].cells[0].children[0].checked=false;
+				}
+			}
+			changeColor();
+			
+		}
+		
+		/*--------提交信息，生成新的一行--------------------------------------------*/
+
+		var num = data.length;
+		form1.sub.onclick = function() {//提交按钮
+			if(form1.username.value == "" || form1.sex.value == "" || form1.age.value == "") {
+				alert("请输入完整信息~");
+				return;
+			}
+
+			num++;
+			createTr({
+				"id": num,//序号递增
+				"name": form1.username.value,
+				"sex": form1.sex.value,
+				"age": form1.age.value
+			});
+			changeColor();
+			checkAll.checked=false;
+		}
+	/*---------------排序-----------------------------------------------*/
+		sort.onclick = function() {
+			if(form1.orderName.value == "" || form1.orderBy.value == "") {
+				alert("请输入正确的排序字段和方式哦~");
+				return;
+			}
+			bubbleSort(form1.orderName.value, form1.orderBy.value);//调用排序函数
+			changeColor();//排序完成以后，执行 改变颜色函数
+		}
+
+		function bubbleSort(orderName, orderBy) {//排序函数（排序字段，排序方式）
+			var trs = oTbody.getElementsByTagName("tr");
+			//				console.log(trs);
+			for(var i = 0; i < trs.length - 1; i++) {
+				//					console.log(1);
+				for(var j = 0; j < (trs.length - 1 - i); j++) {
+					//console.log(2);
+					if(orderName == "id") {
+						var v1 = Number(trs[j].cells[1].innerHTML);
+						var v2 = Number(trs[j + 1].cells[1].innerHTML);
+						console.log(v1, v2);
+					}
+					if(orderName == "age") {
+						var v1 = Number(trs[j].cells[4].innerHTML);
+						var v2 = Number(trs[j + 1].cells[4].innerHTML);
+					}
+					if(orderBy == "asc") { //升序
+						if(v1 > v2) {
+							oTbody.insertBefore(trs[j + 1], trs[j]);
+						}
+					}
+					if(orderBy == "desc") { //降序
+						if(v1 < v2) {
+							oTbody.insertBefore(trs[j + 1], trs[j]);
+						}
+					}
+
+				}
+			}
+
+		}
+	</script>
+
+</body>
+
+</html>

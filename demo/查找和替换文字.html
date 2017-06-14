@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		body{
+			margin: 0;
+			font-family: "微软雅黑";
+		}
+		a{	
+			text-decoration: none;
+			color: #fff;
+			display: block;
+		}
+		input{
+			border: none;
+			padding: 0;
+			margin: 0;
+			outline: none;
+		}
+		#warp{
+			width: 650px;
+			height: 440px;
+			background: #D8D7DB;
+			margin: 50px auto;
+			padding: 30px;
+		}
+		#warp .up{
+			height: 300px;
+			position: relative;
+		}
+		#box{
+			text-indent: 2em;
+			width: 480px;
+			padding: 10px;
+			height: 280px;
+			background: #fff;
+			position: relative;
+			overflow: auto;
+		}
+		#box mark{
+			background: #FF4500;
+		}
+
+		#select{
+			width: 80px;
+			height: 36px;
+			background: #8E8E8E;
+			position: absolute;
+			text-align: center;
+			line-height: 36px;
+			right: 0;
+			top: 0;
+		}
+		#select>a:hover{
+			background: #999;
+		}
+		#select .links{
+			display: none;
+		}
+		
+		#select .links a{
+			border-top: 1px solid #fff;
+			background: #aaa;
+		}
+		#select .links a:hover{
+			background: #9CCE00;
+		}
+		#under{
+			margin-top: 20px;
+			width: 480px;
+			padding: 5px;
+			height: 100px;
+			border: 5px solid #ADFF2F;
+			background: sandybrown;
+			display: none;
+		}
+		#nav{
+			height: 36px;
+			border-bottom: 2px solid #FF4500;
+		}
+		#nav a{
+			width: 80px;
+			height: 36px;
+			float: left;
+			line-height: 36px;
+			color: #000000;
+			text-align:center;
+			vertical-align: bottom;
+		}
+		#nav a.active{
+			background: #FF4500;
+			color: #fff;
+			font-weight: bold;
+		}
+		input{
+			vertical-align: top;
+			height: 30px;
+			line-height: 30px;
+			margin-right: 10px;
+			border-radius: 5px;
+		}
+		.cont{
+			padding-top: 20px;
+		}
+		.cont input{
+			display: none;
+		}
+		.cont input.active{
+			display: inline-block;
+		}
+		#text1,#text2{
+			width: 150px;
+			height: 30px;
+		}
+		#btn1,#btn2{
+			width: 50px;
+			height: 30px;
+			font:bold 14px/30px arial;
+		}
+		#nav #closed{
+			width: 40px;
+			float: right;
+			font-weight: bold;
+		}
+		
+	</style>
+	<body>
+		
+		<div id="warp">
+			<div class="up">
+				<div id="box">
+					红公鸡尾巴灰，灰公鸡尾巴红；红公鸡尾巴灰，灰公鸡尾巴红；鸡蛋糍粑我也吃，糍粑鸡蛋我也吃；鸡蛋糍粑我也吃，糍粑鸡蛋我也吃；钓鱼要到岛上钓，不到岛上钓不到；钓鱼要到岛上钓，不到岛上钓不到。
+				</div>
+				<div id="select">
+					<a href="javascript:;">展开</a>
+					<div class="links" >
+						<a href="javascript:;">查找</a>
+						<a href="javascript:;">替换</a>
+					</div>
+				</div>
+			</div>
+			<div id="under">
+				<div id="nav">
+					<a class="active" href="javascript:;">查找</a>
+					<a href="javascript:;">替换</a>
+					<a id="closed" href="javascript:;">X</a>
+				</div>
+				<div class="cont">
+					<input class="active" type="text" name="" id="text1" />
+					<input type="text" name="" id="text2" />
+					<input  class="active" type="button" id="btn1" value="查找" />
+					<input type="button" id="btn2" value="替换" />
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+			
+			var oBox = document.getElementById("box");
+			var oSelect = document.getElementById("select");
+			var oLink = oSelect.getElementsByClassName("links")[0];
+			var $as = oLink.getElementsByTagName("a");
+			var oClosed = document.getElementById("closed");
+			var oUnder = document.getElementById("under");
+			var aNavs = oUnder.getElementsByTagName("a");
+			var aInputs = oUnder.getElementsByTagName("input");
+			//text1 查找框，text2 替换框 btn1 查找按钮 ， btn2 替换按钮
+			var str ="";
+			var arr = [];
+//----------------------------------------------------------------
+			oSelect.onmouseover = function(){
+				oLink.style.display = "block";
+			}
+			oSelect.onmouseout = function(){
+				oLink.style.display = "none";
+			}
+
+			function find(){//查找函数
+				//清空先
+				aNavs[1].className = "";
+				aInputs[1].className = "";
+				aInputs[3].className = "";
+				//再添加
+				oUnder.style.display = "block";
+				aNavs[0].className = "active";
+				aInputs[2].className = "active";				
+			}
+			
+			function replace(){//添加函数
+				//cleaer style
+				aNavs[0].className = "";
+				aInputs[2].className = "";
+				//add style
+				oUnder.style.display = "block";
+				aNavs[1].className = "active";
+				aInputs[1].className = "active";
+				aInputs[3].className = "active";				
+			}
+			//点击 查找 选项
+			$as[0].onclick = function(){
+				find();
+			}			
+			//点击 替换 选项
+			$as[1].onclick = function(){
+				replace();
+			}
+			aNavs[0].onclick = function(){
+				
+				find();
+			}
+			aNavs[1].onclick = function(){
+				replace();
+			}
+			
+			
+			oClosed.onclick = function(){
+			
+				oUnder.style.display = "none";
+				
+			}
+			//点击 查找 按钮
+			aInputs[2].onclick = function(){
+				str = oBox.innerHTML;
+				var str2 = "";			
+				if(aInputs[0].value==""){
+					alert("请输入内容！")
+				}else{
+						str  = str.split("<mark>").join();
+						str = str.split("</mark>").join();
+						var a = str.indexOf(aInputs[0].value);	
+					if( a!= -1){
+						arr = str.split(aInputs[0].value);				
+						str2 = "<mark>"+aInputs[0].value+"</mark>";				
+						oBox.innerHTML = arr.join(str2);
+						
+						aInputs[0].value = "";
+					}else{
+						alert("没有找到["+ aInputs[0].value +"]！");
+						aInputs[0].value = "";
+					}
+				}		
+			}
+			
+			// 点击“替换”按钮
+			aInputs[3].onclick = function(){
+				str = oBox.innerHTML;
+				var str2 = "";
+				if( aInputs[0].value==""||aInputs[1].value=="" ){
+					
+					alert("请输入需要替换的入内容！")
+					
+				}else{
+						str  = str.split("<mark>").join();
+						str = str.split("</mark>").join();
+						var a = str.indexOf(aInputs[0].value);//首次匹配 查找框的value	
+						console.log(a);//首次匹配 的  index 值，
+						
+					if(a!= -1){//表示存在index，存在
+												
+						arr = str.split(aInputs[0].value);				
+						str2 = "<mark>"+aInputs[1].value+"</mark>";				
+						oBox.innerHTML = arr.join(str2);
+						
+						aInputs[0].value = "";
+						aInputs[1].value = "";
+						
+					}else{//表示没有匹配的
+						
+						alert("没有找到["+ aInputs[0].value +"]！");
+						aInputs[0].value = "";
+						aInputs[1].value = "";
+					}
+					
+				}
+			}
+			
+		</script>
+		
+	</body>
+</html>

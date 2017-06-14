@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			img{
+				border: none;
+				vertical-align: top;	
+			}
+			#box{
+				width:350px;
+				height:350px;
+				border:1px solid #000;
+				position:relative;
+			}
+			#box2{
+				width:400px;
+				height:400px;
+				position:absolute;
+				left:370px;
+				top:0;
+				background:url(img/big.jpg);
+				/*background-position:100px 100px;*/
+				display: none;
+			}
+			.magnify{/*放大*/
+				width:175px;
+				height:175px;
+				background:rgba(255,0,0,0.2);
+				position:absolute;
+				display: none;
+				/*transition:1s;*/
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<img src="img/small.jpg"/>
+			<div class="magnify" id="sBox"></div>
+		</div>
+		<div id="box2"></div>
+		
+		<script type="text/javascript">
+			var sBox=document.getElementById("sBox");
+			var w1=getComputedStyle(sBox).width;//放大镜的宽度
+			sw=w1.substr(0,w1.length-2);//不带单位
+			var h1=getComputedStyle(sBox).height;
+			sh=h1.substr(0,h1.length-2);//不带单位
+			
+			var box2=document.getElementById("box2");//放大后显示区域
+			var w2=getComputedStyle(box2).width;
+			bw=w2.substr(0,w2.length-2);//不带单位
+			var h2=getComputedStyle(box2).height;
+			bh=h2.substr(0,h2.length-2);//不带单位
+			
+			//放大倍数
+			var n=bw/sw;
+//var n=2;
+			console.log(n);
+//			console.log(w,h);
+			var box=document.getElementById("box");
+			box.onmousemove=function(ev){//ev表示事件处理函数的详细信息
+//				console.log(ev);
+				sBox.style.left=(ev.clientX-sw/2)+"px";
+				sBox.style.top=(ev.clientY-sh/2)+"px";
+				box2.style.backgroundPositionX=-(ev.clientX-sw/2)*n+"px";
+				box2.style.backgroundPositionY=-(ev.clientY-sh/2)*n+"px";
+				sBox.style.display="block";
+				box2.style.display="block";
+				if( ev.clientX < sw/2 ){//如果鼠标的左侧距离少于放大镜的width/2，放大镜left：0
+					//box2的background-position-x:0
+					sBox.style.left=0;
+					box2.style.backgroundPositionX=0;
+					
+				}else if( ev.clientX > sw*1.5 ){
+					sBox.style.left=w1;
+
+					box2.style.backgroundPositionX=-sw*n+"px";
+					
+					
+				}
+				
+				if( ev.clientY < sh/2 ){
+					sBox.style.top=0;
+					box2.style.backgroundPositionY=0;
+					
+					
+				}else if(ev.clientY > sh*1.5){
+					sBox.style.top=h1;
+					box2.style.backgroundPositionY=-sh*n+"px";
+				}
+				
+			}
+			box.onmouseout=function(){//包括移出子级元素
+				sBox.style.display="none";
+				box2.style.display="none";
+			}
+		</script>
+		
+	</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>百度评分</title>
+		<style>
+			body,h1 {
+				margin: 0;
+				padding: 0;
+				-webkit-font-smoothing: antialiased;
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="pingfen.css"/>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="baidu">
+				<div class="caption">
+					<h1></h1>
+					<span>总体评价</span>
+				</div>
+				<div class="context">
+					<div class="starts">
+						<span>☆</span>
+						<span>☆</span>
+						<span>☆</span>
+						<span>☆</span>
+						<span>☆</span>
+					</div>
+					<div class="info"></div>
+				</div>
+				<div class="tips">
+					小提示：点击星星就能打分
+				</div>
+			</div>
+		</div>
+		<!--☆★ 极差，一般，不错，推荐，力推-->
+		<!--
+			
+		-->
+		<script>
+			
+			var oWrap=document.getElementsByClassName('wrap')[0];
+			var oContext=oWrap.getElementsByClassName('context')[0];
+			var oInfo=oContext.getElementsByClassName('info')[0];
+			var oStartBox=oContext.getElementsByClassName('starts')[0];
+			var aSpan=oStartBox.getElementsByTagName('span');//获取所有星星的集合
+			var arrInfo=['极差','一般','不错','推荐','力推'];
+			
+			for( var i=0;i<aSpan.length;i++){
+				aSpan[i].onOff=false;
+				aSpan[i].index=i;
+				Tab(i);
+			}
+			
+			function Tab(n){
+//				var num=0;
+				aSpan[n].onOff=false;
+				aSpan[n].onmouseover=function(){//鼠标移入事件
+					
+					if(this.onOff==false){
+						for(var i=0;i<=this.index;i++){//点击时，当前的以及之前的所有都星星都显示选中状态
+							aSpan[i].innerHTML="★";//点击的span之前的   里面都有实心的star
+							oInfo.style.display="block";
+							oInfo.innerHTML=arrInfo[i];
+							
+							if(i<2){
+								aSpan[i].style.color="pink";
+								
+							}else if(i>=2 && i < aSpan.length){
+								
+								for(var j=0;j<=i;j++){
+									aSpan[j].style.color="red";
+								}
+							}
+							oInfo.style.display="block";
+							oInfo.innerHTML=arrInfo[i];
+						}
+					}
+				}
+				
+				
+				aSpan[n].onclick=function(){//点击事件
+					//点击之前先清空所有
+					for(var i=0;i<aSpan.length;i++){
+						aSpan[i].innerHTML="☆";
+						aSpan[i].style.color="";
+						aSpan[i].onOff=false;//对应没有选中状态
+						oInfo.style.display="none";
+					}
+					
+					if(this.onOff==false){
+						for(var i=0;i<=this.index;i++){//点击时，当前的以及之前的所有都星星都显示选中状态
+							aSpan[i].innerHTML="★";//点击的span之前的   里面都有实心的star
+							
+							if(i<2){//点击第0个和第1个的时候
+								aSpan[i].style.color="pink";
+//								aSpan[i].onOff="true";
+							}else if(i>=2 && i < aSpan.length){//点击2~4个时候
+								for(var j=0;j<=i;j++){
+									aSpan[j].style.color="red";
+//									aSpan[i].onOff="true";
+								}
+							}
+							oInfo.style.display="block";
+							oInfo.innerHTML=arrInfo[this.index];
+							this.onOff=true;
+						}
+						
+					}
+			
+//	console.log(aSpan[0].onOff,aSpan[1].onOff,aSpan[2].onOff,aSpan[3].onOff,aSpan[4].onOff);	
+				}
+				
+				
+				
+				
+				aSpan[n].onmouseout=function(){//鼠标移出事件
+					if(this.onOff==false){
+						
+						for(var i=0;i<aSpan.length;i++){
+							aSpan[i].innerHTML="☆";
+							aSpan[i].style.color="";
+							oInfo.style.display="none";
+							aSpan[i].onOff=false;
+						}
+						
+					}
+	console.log(aSpan[0].onOff,aSpan[1].onOff,aSpan[2].onOff,aSpan[3].onOff,aSpan[4].onOff);	
+						
+				}
+			}
+			
+
+			
+		</script>
+	</body>
+</html>

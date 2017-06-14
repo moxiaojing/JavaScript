@@ -32,11 +32,14 @@ function Drag(options){
 }
 
 Drag.prototype = {
+	
 	constructor: Drag,//重新指向实例
+	
 	init(){
 		//要把一个函数的this改变为指定的值，并且不调用函数，使用bind方法
 		this.defaults.targetEle.onmousedown = this.downFn.bind(this);
 	},
+	
 	downFn(ev){
 		//this => 实例
 		this.disX = ev.clientX - this.element.offsetLeft;
@@ -47,6 +50,7 @@ Drag.prototype = {
 
 		ev.preventDefault();
 	},
+	
 	limit(){//限制范围
 		if( this.x < 0 ){
 			this.x = 0;
@@ -61,6 +65,7 @@ Drag.prototype = {
 			this.y = document.documentElement.clientHeight - this.element.offsetHeight;
 		}
 	},
+	
 	moveFn(ev){
 
 		//限制的两个运算后的值
@@ -73,6 +78,7 @@ Drag.prototype = {
 		this.element.style.left = this.x + "px";
 		this.element.style.top = this.y + "px";
 	},
+	
 	upFn(){
 		document.onmousemove = null;
 		document.onmouseup = null;

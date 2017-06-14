@@ -10,10 +10,26 @@
 		</style>
 		
 		<link rel="stylesheet" type="text/css" href="demo.css">
-		<script src="tools.js"></script>
 		<script src="drag.js"></script>		
 		
 		<script type="text/javascript">
+			
+			var tools = {
+				
+				on:function( ele,evName,evFn ){
+					
+					ele.addEventListener( evName,evFn ,false );
+					
+				},
+				
+				//解除ele 身上绑定的 evName 事件的处理函数 evFn
+				off:function( ele,evName,evFn ){//解除ele 身上绑定的 evName 事件的处理函数 evFn
+					
+					ele.removeEventListener( evName,evFn ,false );
+					
+				}
+				
+			}
 			
 			//构造函数
 			function Dialog( options ){
@@ -21,52 +37,57 @@
 				options = options || {};//表示如果传入的参数不是对象，就赋值一个{}；
 				//如果options={}，那么说明传入的参数不对，抛出错误提醒
 				if( options.constructor != Object ){//用 构造器 constructor判断传入的参数是不是对象
+					
 					throw new Error( "请传入对象" );
+					
 					options = {};
+					
 				}
+				
 				//设置一份默认的参数对象，即弹框的默认样式
 				this.defaults = {
+					
 					title:"这是一个弹框",
 					content:"这是内容",
 					left:null,
 					top:null
+					
 				}
 				
 				//复制一份传入的参数，然后再使用,避免会在使用过程中修改了原型上的
 				for( var attr in options ){
+					
 					if( options.hasOwnProperty( attr ) ){//如果参数自身 存在 自定义属性或方法
+						
 						this.defaults[attr] = options[attr];//赋值给默认参数对象
+						
 					}
+					
 				}
 				
 				//初始化
 				this.init();		
 				
-				//弹框的拖拽调用
-				//参数也是一个对象形式
-//					{
-//						targetEle:null,      鼠标按下目标
-//						moveEle:null          移动的目标
-//					}
-				new Drag({
-					targetEle:this.h3,//鼠标按下h3,拖动弹框
-					moveEle:this.tanBox
-				})
 			}
+			
 			//在构造函数原型上添加属性或方法
 			Dialog.prototype = {//直接给原型赋值一个新的对象，会改变原型的默认值，也该变了constructor的指向
-				constructor:Dialog,//要重新定义constructor指向
+				
+				constructor:Dialog,//要重新定义constructor指向				
 				//初始化
 				init:function(){
 					//弹框放到body中，居中 
 					this.tanBox = this.createPopHtml();//将生成的弹框结构存到原型的tanbox属性上，方便之后的使用
 					document.body.appendChild( this.tanBox );
+					
 					this.tanBox.style.zIndex = 100;//层级高于遮罩层1个
 					
 					//遮罩层也放入到body中
 					
 					this.zhezhao = this.createMask();
+					
 					document.body.appendChild(this.zhezhao);
+					
 					this.zhezhao.style.zIndex = 99;//层级高于遮罩层1个
 					
 					//初始化默认居中
@@ -74,8 +95,22 @@
 					this.position();
 					
 					this.h3 = this.tanBox.querySelector("h3");//获取弹框上的标题
-					this.close = this.tanBox.querySelector(".close");//获取弹框上的关闭
 					
+					//弹框的拖拽调用
+					//参数也是一个对象形式
+//					{
+//						targetEle:null,      鼠标按下目标
+//						moveEle:null          移动的目标
+//					}
+					new Drag({//拖拽弹框
+						
+						targetEle:this.h3,//鼠标按下h3,拖动弹框
+						moveEle:this.tanBox
+						
+					})
+					
+					this.okFn();//确认事件
+					this.cancelFn();//取消事件
 					this.closePop();//关闭弹框
 				},
 				
@@ -96,30 +131,36 @@
 					 */
 					
 					var isLeft = blLeft && ( this.defaults.left !== null );
+					
 					var isTop = blTop && ( this.defaults.top !== null );
 					
 					//居中时候，left 和 top 值
 					var L = ( document.documentElement.clientWidth - this.tanBox.offsetWidth )/2;
-					var T = ( document.documentElement.clientHeight - this.tanBox.offsetHeight )/2;
 					
+					var T = ( document.documentElement.clientHeight - this.tanBox.offsetHeight )/2;
+										
 					if( isLeft && isTop ){//参数同时有left和top值
 						
 						this.tanBox.style.left = this.defaults.left + "px";
+						
 						this.tanBox.style.top = this.defaults.top + "px";
 						
 					}else if( isLeft ){//参数中只有left值
 						
 						this.tanBox.style.left = this.defaults.left + "px";
+						
 						this.tanBox.style.top = T + "px";
 						
 					}else if( isTop ){//参数中只有top值
 						
 						this.tanBox.style.left = L + "px";
+						
 						this.tanBox.style.top = this.defaults.top + "px";
 						
 					}else{//参数没有传入left和top值，默认居中显示
 						
 						this.tanBox.style.top = T + "px";
+						
 						this.tanBox.style.left = L + "px";
 					}
 				
@@ -127,7 +168,9 @@
 				
 				//生成弹框结构
 				createPopHtml:function(){
+					
 					var popDiv = document.createElement("div");
+					
 					popDiv.className = "full-pop";
 
 					var str = `<h3>
@@ -149,25 +192,93 @@
 				},
 				//生成遮罩层
 				createMask:function(){
+					
 					var mask = document.createElement("div");
+					
 					mask.style.cssText = "width:100%;height:100%;background:#000;opacity: .5;position:fixed;left:0;top:0;";
+					
 					return mask;
+					
 				},
-				
 				//点击关闭按钮
 				closePop:function(){
+					
+					this.close = this.tanBox.querySelector(".close");//获取弹框上的关闭
+					
 					var _this = this;//将实例指向存到变量中
+					
 					tools.on( this.close , "click", function(){
 						
-//						console.log(this)//点击事件的this指向触发事件的element，不是实例
+//						console.log(this)//点击事件的this指向触发事件的element，不是实例						
+						if( _this.tanBox ){
+							
+							document.body.removeChild( _this.tanBox );
+							
+							document.body.removeChild( _this.zhezhao );
+							
+						}
+						
+					})
+				},
+				
+				//点击确认按钮
+				okFn:function(){
+					
+					this.confirm = this.tanBox.querySelector(".confirm");//获取弹框上的关闭
+					
+					var _this = this;//将实例指向存到变量中
+					
+					tools.on( this.confirm , "click", function(){
+						
+//						console.log(this)//点击事件的this指向触发事件的element，不是实例	
+						var bl = _this.defaults.okFn();
+						//规定
+//						return true;     不关闭弹框
+//						return false;    关闭弹框
 						
 						if( _this.tanBox ){
-							document.body.removeChild( _this.tanBox );
-							document.body.removeChild( _this.zhezhao );
+							
+							if( !bl ){
+							
+								document.body.removeChild( _this.tanBox );
+								
+								document.body.removeChild( _this.zhezhao );
+							}
+							
+						}						
+						
+					})
+						
+				},
+				//点击取消按钮
+				cancelFn:function(){
+					
+					this.cancel = this.tanBox.querySelector(".cancel");//获取弹框上的关闭
+					
+					var _this = this;//将实例指向存到变量中
+					
+					tools.on( this.cancel , "click", function(){
+						
+//						console.log(this)//点击事件的this指向触发事件的element，不是实例						
+						var bl = _this.defaults.cancelFn();
+						//规定
+//						return true;     关闭弹框
+//						return false;    不关闭弹框
+						
+						if( _this.tanBox ){
+							
+							if( bl ){
+							
+								document.body.removeChild( _this.tanBox );
+								
+								document.body.removeChild( _this.zhezhao );
+							}
+							
 						}
 						
 					})
 				}
+				
 			}
 		</script>
 	</head>
@@ -180,6 +291,7 @@
 		<input type="button" id="btn" value="点击出现弹框" />
 		
 		<script>
+			
 			btn.onclick=function(){
 				//在使用弹框的时候，传入参数是一个对象，里面填入可以自定义各种样式
 //				{
@@ -192,9 +304,18 @@
 					title:"此处填写弹框标题",
 					content:"确认操作",
 					left:null,
-					top:null
+					top:null,
+					okFn:function(){
+						alert("确认改动");
+						return true;//不关闭
+					},
+					cancelFn:function(){
+						alert("取消改动");
+						return true;//关闭
+					}
 				});
 			}
+			
 		</script>
 	</body>
 </html>

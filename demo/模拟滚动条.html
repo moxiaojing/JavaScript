@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#wrap{
+				width: 40px;
+				height:400px;
+				background:gray;
+				border:2px solid #222324;
+				float:left;
+				position: relative;
+			}
+			#scroll{
+				width:40px;
+				height:40px;
+				background:#aaa;
+				position:absolute;
+			}
+			#box{
+				width:300px;
+				height:400px;
+				border:1px solid #000;
+				float:left;
+				margin-left:10px;
+				position: relative;
+				overflow: hidden;
+			}
+			#cont{
+				line-height: 40px;
+				position: absolute;
+				left:0px;
+				top:0px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="scroll"></div>
+		</div>
+		<div id="box">
+			<div id="cont">
+				那一次和你相遇人海里,却让我从此认识了你,彼此一次一次地谈心,给我留下了美好回忆,你就像一道最美的风景,却叫我可望而不可及,现在的我早已不能自己,已经深深的对你着迷,爱 来的太快,我 无法抗拒,就这样深深地爱上了你，多想对你说声我爱你，又怕你会把我远离，只有把爱藏心里，默默的关心你，多想对你说声我爱你，又怕你会把我远离，我只要简单的爱情，一辈子永远不分离
+				那一次和你相遇人海里,却让我从此认识了你,彼此一次一次地谈心,给我留下了美好回忆,你就像一道最美的风景,却叫我可望而不可及,现在的我早已不能自己,已经深深的对你着迷,爱 来的太快,我 无法抗拒,就这样深深地爱上了你，多想对你说声我爱你，又怕你会把我远离，只有把爱藏心里，默默的关心你，多想对你说声我爱你，又怕你会把我远离，我只要简单的爱情，一辈子永远不分离
+				
+			</div>
+		</div>
+		<script type="text/javascript">
+			var wrap = document.getElementById("wrap");
+			var scroll = document.getElementById("scroll");
+			var box = document.getElementById("box");
+			var cont = document.getElementById("cont");
+			var contMaxH = box.clientHeight-cont.offsetHeight;
+			scroll.onmousedown=function(e){
+				var disY = e.clientY-scroll.offsetTop;
+				var maxTop=wrap.clientHeight-scroll.offsetHeight;//可移动的最大范围
+				document.onmousemove=function(e){
+					var scrollY=e.clientY-disY;
+					scrollY = scrollY < 0 ? 0 : scrollY ;
+					scrollY = scrollY > maxTop ? maxTop : scrollY ;
+					
+					var b = scrollY / maxTop;
+					scroll.style.top = scrollY + "px";
+					
+					cont.style.top =  b*contMaxH+"px";
+				}
+				
+				document.onmouseup=function(){
+					document.onmousemove=null;
+				}
+				
+				return false;
+			}
+		</script>
+	</body>
+</html>

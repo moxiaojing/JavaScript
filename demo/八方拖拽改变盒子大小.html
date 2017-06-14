@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#box{
+				width:100px;
+				height:100px;
+				background: deeppink;
+				position:absolute;
+				left:200px;
+				top:200px;
+				/*
+				 e-east东
+				 w-west-西
+				 s-south南
+				 n-north北
+				 */
+				/*cursor:e-resize;*/
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box"></div>
+		<script type="text/javascript">
+			var box=document.getElementById("box");
+			var isPlay=false;//表示box没有被点中	
+			var mousePL;//左侧方向
+			var mousePR;//右侧
+			var mousePT;//顶部方向
+			var mousePB;//底部
+			box.onmousemove=function(e){
+				mousePL=e.clientX-box.offsetLeft;//左侧方向
+				mousePR=box.offsetWidth-mousePL;//右侧
+				mousePT=e.clientY-box.offsetTop;//顶部方向
+				mousePB=box.offsetHeight-mousePT;//底部
+				
+				if( (mousePL < 5 && mousePL >= 0) && (mousePT < 5 && mousePT >= 0) ){//鼠标所在位置
+					//左上角
+					box.style.cursor="nw-resize";
+					
+				}else if( (mousePR < 5 && mousePR >= 0) && (mousePT < 5 && mousePT >= 0) ){
+					//右上角
+					box.style.cursor="ne-resize";
+					
+				}else if ( (mousePL < 5 && mousePL >= 0) && (mousePB <5 && mousePB >=0) ){
+					//左下角
+					box.style.cursor="ne-resize";
+					
+				}else if( (mousePR < 5 && mousePR >= 0) && (mousePB <5 && mousePB >=0) ){
+					//右下角
+					box.style.cursor="nw-resize";
+					
+				}else if( mousePL < 5 && mousePL >= 0 ){
+					//左侧边框
+					box.style.cursor="w-resize";
+					
+				}else if( mousePR < 5 && mousePR >= 0 ){
+					//右侧边框
+					box.style.cursor="w-resize";
+					
+				}else if( mousePT < 5 && mousePT >= 0 ){
+					//上面边框
+					box.style.cursor="n-resize";
+					
+				}else if( mousePB <5 && mousePB >=0 ){
+					//底部边框
+					box.style.cursor="n-resize";
+					
+				}else{
+					box.style.cursor = "auto";
+				}
+				return false;//阻止浏览器的默认行为
+//				e.cancelBubble = true;
+			}
+			
+			box.onmousedown=function(e){
+				isPlay=true;
+				mousePL=e.clientX-box.offsetLeft;//左侧方向
+				mousePR=box.offsetWidth-mousePL;//右侧
+				mousePT=e.clientY-box.offsetTop;//顶部方向
+				mousePB=box.offsetHeight-mousePT;//底部
+				
+				var mouseL=e.clientX;//存储师表按下时候距离可视区域左侧的距离
+				var mouseT=e.clientY;//存储鼠标按下时候距离可视区域顶部的距离
+				var boxW=box.offsetWidth;//鼠标按下时候，box的可视width
+				var boxH=box.offsetHeight;//鼠标按下时候，box的可视height
+				var boxL=box.offsetLeft;//鼠标按下时候，box距离可视区域 左侧 的距离
+				var boxT=box.offsetTop;//鼠标按下时候，box距离可视区域 顶部 的距离
+				
+				document.onmousemove=function(e){
+					box.onmousemove = null;//防止box的冒泡事件
+					if(isPlay){
+						if( (mousePL < 5 && mousePL >= 0) && (mousePT < 5 && mousePT >= 0) ){//鼠标所在位置
+							//左上角
+							box.style.cursor="nw-resize";
+							box.style.width = ( mouseL- e.clientX + boxW )+"px";
+							box.style.left = ( boxL-( mouseL- e.clientX ) )+"px";
+							box.style.height = ( mouseT- e.clientY + boxH )+"px";
+							box.style.top = ( boxT - ( mouseT- e.clientY ) )+"px";
+														
+						}else if( (mousePR < 5 && mousePR >= 0) && (mousePT < 5 && mousePT >= 0) ){
+							//右上角
+							box.style.cursor="ne-resize";
+							box.style.width=( e.clientX- mouseL + boxW )+"px";
+							box.style.height = ( mouseT- e.clientY + boxH )+"px";
+							box.style.top = ( boxT - ( mouseT- e.clientY ) )+"px";
+							
+						}else if ( (mousePL < 5 && mousePL >= 0) && (mousePB <5 && mousePB >=0) ){
+							//左下角
+							box.style.cursor="ne-resize";
+							box.style.width = ( mouseL- e.clientX + boxW )+"px";
+							box.style.left = ( boxL-( mouseL- e.clientX ) )+"px";
+							box.style.height=( e.clientY - mouseT + boxH )+"px";
+							
+							
+						}else if( (mousePR < 5 && mousePR >= 0) && (mousePB <5 && mousePB >=0) ){
+							//右下角
+							box.style.cursor="nw-resize";
+							box.style.width=( e.clientX- mouseL + boxW )+"px";
+							box.style.height=( e.clientY - mouseT + boxH )+"px";
+							
+						}else if( mousePL < 5 && mousePL >= 0 ){
+							//左侧边框
+							box.style.cursor="w-resize";
+							
+							if( (e.clientX - mouseL)> boxW ){//表示鼠标按住左侧边框 向右侧移动
+								box.style.left = ( boxL+boxW )+"px";
+								box.style.width=( e.clientX - mouseL - boxW )+"px";
+							}else{
+								box.style.width = ( mouseL- e.clientX + boxW )+"px";
+								box.style.left = ( boxL-( mouseL- e.clientX ) )+"px";
+							}
+							
+						}else if( mousePR < 5 && mousePR >= 0 ){
+							//右侧边框
+							box.style.cursor="w-resize";
+							if( mouseL - e.clientX > boxW ){//表示鼠标按住右侧边框向左边移动
+								box.style.width = ( mouseL- e.clientX - boxW )+"px";
+								box.style.left = e.clientX +"px";
+								
+							}else{
+								box.style.width=( e.clientX- mouseL + boxW )+"px";
+								box.style.left =  boxL +"px";
+							}							
+							
+						}else if( mousePT < 5 && mousePT >= 0 ){
+							//顶部边框
+							box.style.cursor="n-resize";
+							if( e.clientY-mouseT > boxH ){//鼠标按住顶部边框项下移动
+								box.style.top=(boxH+boxT)+"px";
+								box.style.height=(e.clientY-boxH-boxT)+"px";
+							}else{
+								box.style.height = ( mouseT- e.clientY + boxH )+"px";
+								box.style.top = ( boxT - ( mouseT- e.clientY ) )+"px";
+							}
+							
+						}else if( mousePB <5 && mousePB >=0 ){
+							//底部边框
+							box.style.cursor="n-resize";
+							if((mouseT-e.clientY) > boxH){
+								box.style.top=e.clientY+"px";
+								box.style.height=( mouseT-e.clientY-boxH )+"px";
+								
+							}else{
+								box.style.top=boxT+"px";
+								box.style.height=( e.clientY - mouseT + boxH )+"px";
+							}
+							
+						}else{
+							box.style.cursor = "auto";
+						}
+					}
+				}
+				document.onmouseup=function(){
+					document.onmousemove=null;
+					box.onmousemove=function(e){
+							mousePL=e.clientX-box.offsetLeft;//左侧方向
+							mousePR=box.offsetWidth-mousePL;//右侧
+							mousePT=e.clientY-box.offsetTop;//顶部方向
+							mousePB=box.offsetHeight-mousePT;//底部
+							
+							if( (mousePL < 5 && mousePL >= 0) && (mousePT < 5 && mousePT >= 0) ){//鼠标所在位置
+								//左上角
+								box.style.cursor="nw-resize";
+								
+							}else if( (mousePR < 5 && mousePR >= 0) && (mousePT < 5 && mousePT >= 0) ){
+								//右上角
+								box.style.cursor="ne-resize";
+								
+							}else if ( (mousePL < 5 && mousePL >= 0) && (mousePB <5 && mousePB >=0) ){
+								//左下角
+								box.style.cursor="ne-resize";
+								
+							}else if( (mousePR < 5 && mousePR >= 0) && (mousePB <5 && mousePB >=0) ){
+								//右下角
+								box.style.cursor="nw-resize";
+								
+							}else if( mousePL < 5 && mousePL >= 0 ){
+								//左侧边框
+								box.style.cursor="w-resize";
+								
+								
+							}else if( mousePR < 5 && mousePR >= 0 ){
+								//右侧边框
+								box.style.cursor="w-resize";
+								
+							}else if( mousePT < 5 && mousePT >= 0 ){
+								//上面边框
+								box.style.cursor="n-resize";
+								
+							}else if( mousePB <5 && mousePB >=0 ){
+								//底部边框
+								box.style.cursor="n-resize";
+								
+							}else{
+								box.style.cursor = "auto";
+							}
+							return false;//阻止浏览器的默认行为
+			//				e.cancelBubble = true;
+						}
+					isPlay=false;
+				}
+				e.cancelBubble=true;
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			textarea{
+				padding:0;
+			}
+			#box{
+				width:924px;
+				height: 300px;
+				padding:10px;
+				border:5px solid #000000;
+				/*background: #DBE3FA;*/
+			}
+			
+			.text{
+				width:394px;
+				height:290px;
+				float:left;
+				background: #E8E7EF;
+				border:1px dashed #000000;
+				font-size:18px;
+				/*text-indent: 2em;/*首行缩进2个字符*/
+				padding:3px;
+			}
+			#rText{
+				overflow: auto;/*表示自动出现滚动条*/
+				word-break: break-all;
+			}
+			#middle{
+				width:100px;
+				height:300px;
+				float:left;
+				/*background: #00008B;*/
+				padding:0 10px;
+				text-align: center;
+			}
+			#btn{
+				display: block;
+				margin-top:20px;
+				/*border:2px solid #000000;*/
+				width:100px;
+				height:40px;
+				background: #FF0000;
+				text-decoration: none;
+				color:#fff;
+				line-height: 40px;
+				margin-bottom: 20px;
+			}
+			#changeBox{
+				margin-top:30px;
+				padding:10px;
+				opacity: 0;
+				transition: 1s;
+			}
+			#changeBox div{
+				width:10px;
+				height:10px;
+				background: #9CCE00;
+				margin-right:3px;
+				float:left;
+			}
+			#changeBox .active{
+				background: #ED872C;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<textarea id="text" class="text" name="" rows="" cols="">我要你在我身旁，我要你为我梳妆，这夜色太清凉</textarea>
+			<div id="middle">
+				<a href="javascript:;" id="btn">搬运开始</a>
+				<span> 0/0 </span>
+				<div id="changeBox">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+			<div class="text" id="rText"></div>
+		</div>
+		<script type="text/javascript">
+			var oBox=document.getElementById('box');
+			var oBtn=document.getElementById('btn');
+			var oText=document.getElementById('text');
+			var oRText=document.getElementById('rText');
+			var oSpan=oBox.getElementsByTagName('span')[0];//表示字符串个数以及运动的个数
+			var oChangeBox=document.getElementById('changeBox');
+			var aDiv=oChangeBox.getElementsByTagName('div');//跑马灯
+			var timer=null;
+			var onOff=false;//控制整体的点击事件是否有效，false对应点击无效，true对应有效
+			var onoff=true;//控制右侧div的内容是否清除，false对应不清除，true对应清除
+			
+			oBtn.onclick=function(){
+				if(onOff==false && !(oText.value=="")){
+					tab();
+					onOff=true;
+				}
+			}
+			
+			function tab(){
+				var a=oText.value;//表示左侧内容
+				oRText.innerHTML="";
+				var b=oRText.innerHTML;//表示右侧内容
+				var m=a.length;//表示最初a的长度
+				var n=0;//表示a运动后剩余的长度
+//				var num=-1;//表示跑马灯的第一个
+				var num=0;
+				timer=setInterval(function(){
+					oChangeBox.style.opacity="1";
+					
+//					num++;
+//					num%=aDiv.length;//0,1,2,3,4...aDiv.length-1
+//					if(num==0){
+//						aDiv[aDiv.length-1].className="";
+//						aDiv[num].className="active";
+//					}else{
+//						aDiv[num-1].className="";
+//						aDiv[num].className="active";
+//					}
+					aDiv[num].className="";
+					num++;
+					num%=aDiv.length;
+					aDiv[num].className="active";
+					
+					b+=a.charAt(0);//获取a中的第0个字符
+					oRText.innerHTML=b;//放到右侧box里
+					
+					a=a.slice(1,a.length);//a剪切第0个字，保留之后的所有内容
+					oText.value=a;//放到左侧box里
+					
+					n=a.length;//将运动后的a的长度存到变量n中
+					oSpan.innerHTML=(m-n)+"/"+m;
+					if(a.length==a){//判断a中文字运动完后，停止定时器
+						clearInterval(timer);
+						oChangeBox.style.opacity="0";
+						onOff=false;
+					}
+					
+				},200);
+			}
+			
+			
+		</script>
+	</body>
+</html>

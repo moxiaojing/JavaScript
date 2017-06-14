@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        input{
+            width: 100%;
+            height: 30px;
+        }
+        ul{
+            margin: 0;
+            padding: 0;
+            display: none;
+        }
+        li{
+            list-style: none;
+            background-color: #009999;
+            margin-top: 3px;
+            line-height: 30px;
+            width: 100%;
+        }
+        a{
+            text-decoration: none;
+            color:white;
+            display: block;
+            width: 100%;
+        }
+        a:hover,.hover{
+            background-color: #00FF99;
+        }
+        #box{
+            width: 500px;
+            margin: 100px auto 0;
+        }
+        .select{
+            background-color: #60625b;
+        }
+    </style>
+    <!--<script>
+        window.onload=function(){
+        	
+        }
+    </script>-->
+</head>
+<body>
+<div id="box">
+    <input type="text" id="s" autocomplete="on"/>
+    <ul id="list">
+        <li><a href="javascript:;">《第七个读者》</a></li>
+        <li><a href="javascript:;">《 心理罪 画像》</a></li>
+        <li><a href="javascript:;">《 心理罪 教化场》</a></li>
+        <li><a href="javascript:;">《 心理罪 暗河》</a></li>
+        <li><a href="javascript:;">《 心理罪 城市之光》</a></li>
+        <li><a href="javascript:;">《地球往事》</a></li>
+        <li><a href="javascript:;">《黑暗森林》</a></li>
+        <li><a href="javascript:;">《死神永生》</a></li>
+        <li><a href="javascript:;">《乡村教师》</a></li>
+        <li><a href="javascript:;">《地球大炮》</a></li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+	var oBox=document.getElementById("box");
+	var oS=document.getElementById("s");
+	var oUl=document.getElementById("list");
+	var as=oUl.getElementsByTagName("a");
+	var arr=[];//用来存放点击a的顺序
+//	var arr2=[];//用来存放选中的a的innerHTML
+	oS.onfocus=function(e){//text获取焦点
+		oUl.style.display="block";
+	}
+	oS.onclick=function(e){//text获取焦点
+		e.cancelBubble=true;//阻止自身的冒泡特性
+	}
+//	oS.onblur=function(){
+//		oUl.style.display="none";
+//	}
+	document.onclick=function(e){
+		oUl.style.display="none";
+	}
+	
+	for(var i=0;i<as.length;i++){//给所有的a添加开关
+		as[i].onOff=false;//默认没有选中
+		as[i].index=i;
+	}
+
+/*-----------点击事件--Ctrl+点击--表示选中-------------------------------------*/
+	oUl.onclick=function(e){//利用子级a的冒泡特性，绑定点击事件
+		e.cancelBubble=true;//阻止自身的冒泡特性
+		oS.focus();//点击事件，每次点击a，a会获取到焦点，也就是光标会在a身上，导致键盘事件发生时，没有办法改变焦点
+		if(this!=e.target){//排除点击ul或li，只能点击a有效
+			if(e.target.onOff){//表示a是选中状态
+				
+				if(e.ctrlKey==true){//按下ctrl
+					oS.value="";
+					e.target.onOff=false;
+					e.target.className="";
+//					for(var i=0;i<arr2.length;i++){
+//						if(arr2[i].innerHTML == e.target.innerHTML){
+//							arr2.splice(i,1);
+//						}
+//					}
+//					oS.value= arr2;
+
+					for(var i=0;i<arr.length;i++){
+						if(arr[i] == e.target.index){//找到取消的那个index在arr中的位置
+							arr.splice(i,1);
+						}
+					}
+					for(var i=0;i<arr.length;i++){
+						oS.value+=as[ arr[i] ].innerHTML;
+					}
+					return;
+				}
+				/*------下面表示没有按住ctrl---------*/
+				for(var i=0;i<as.length;i++){//清空所有a的选中选中样式
+					as[i].className="";
+					as[i].onOff=false;
+				}
+				oS.value="";
+				
+			}else{//表示a没有选中，onOff为false
+				
+				if(e.ctrlKey==true){//按下ctrl
+					e.target.className="select";
+					e.target.onOff=true;
+					
+					arr.push(e.target.index);
+//					arr2.push(e.target.innerHTML);
+					
+					num=e.target.index;
+					
+					oS.value+=e.target.innerHTML;
+					return;
+				}
+				/*----下面表示没有按住ctrl-----*/
+				oS.value=e.target.innerHTML;
+				for(var i=0;i<as.length;i++){//清空所有a的选中选中样式
+					as[i].className="";
+					as[i].onOff=false;
+				}
+				e.target.className="select";
+				e.target.onOff=true;
+			}
+		}
+		
+	}
+	
+/*-------------按下键(keyCode=40)相当于鼠标的移入事件------------*/
+
+	var num=-1;//表示a的下标,全局
+	document.onkeydown=function(e){
+		if(e.keyCode==40){
+			if(num>-1){//先判断a身上的开关，如果是true，class就变成select
+				if(as[num].onOff==true){
+					as[num].className="select";
+				}else{//a身上的开关是false，那就不加class，因为a有hover事件
+					as[num].className="";
+				}
+			}
+			num++;				
+			num%=as.length;
+			as[num].className="hover";
+//			console.log(as[num].onOff);	
+		}
+	}
+	
+/*-----------按Enter键(keyCode=13)或Ctrl+Enter 相当于点击选中事件-----------------------*/	
+
+document.onkeyup=function(e){
+	if(num>-1){
+		
+		if( e.ctrlKey==true && e.keyCode==13){//按住ctrl+Enter,必须写在前面，然后只有keyCode=13的判断条件写在else中
+			if(as[num].onOff){//表示当前的a是被选中的
+				as[num].onOff=false;
+//				arr2=[];
+				oS.value="";
+				for(var i=0;i<as.length;i++){
+					as[i].className="";
+					as[i].onOff=false;
+				}
+				as[num].className="hover";
+				
+			}else{//表示当前的a是没有被选中
+				oS.value="";
+				as[num].onOff=true;
+//				as[num].className="select";
+//				arr2.push( as[num].innerHTML );
+//				oS.value=arr2;
+				arr.push( as[num].index );
+				console.log(arr);
+				for(var i=0;i<arr.length;i++){
+					oS.value+=as[ arr[i] ].innerHTML;
+				}
+			}
+		
+		}else if(e.keyCode==13){//没有ctrl
+			if(as[num].onOff==true){//如果当前这个a的开关是true，表示被选中的状态
+				for(var i=0;i<as.length;i++){
+					as[i].onOff=false;
+					as[i].className="";
+				}
+				as[num].className="hover";
+				oS.value="";
+			}else{//表示当前a的开关是false
+				
+				for(var i=0;i<as.length;i++){
+					as[i].onOff=false;
+					as[i].className="";
+				}
+				
+				as[num].onOff=true;
+				console.log(as[num].onOff,88);
+				as[num].className="hover";
+				oS.value=as[num].innerHTML;
+			}
+		}
+	
+
+	}
+}
+
+</script>
+
+</body>
+</html>

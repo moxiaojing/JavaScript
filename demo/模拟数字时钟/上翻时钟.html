@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			ul{
+				margin:0;
+				padding: 0;
+				list-style: none;
+			}
+			li{
+				float:left;
+				width:50px;
+				position:relative;/*用相对定位对元素自身没有影响*/
+				top:0;/*用相对定位方便向上的运动*/
+			}
+			img{
+				border:none;
+				vertical-align:top;
+			}
+			#list{
+				height:70px;
+				overflow: hidden;
+			}
+			
+			
+		</style>
+	</head>
+	<body>
+		<ul id="list">
+			<li>
+				<img src="img/0.jpg"/>
+				<img src="img/0.jpg"/>
+			</li>
+			<li>
+				<img src="img/0.jpg"/>
+				<img src="img/0.jpg"/>
+			</li>
+			<li>
+				<img src="img/0.jpg"/>
+				<img src="img/0.jpg"/>
+			</li>
+			<li>
+				<img src="img/0.jpg"/>
+				<img src="img/0.jpg"/>
+			</li>
+			<li>
+				<img src="img/0.jpg"/>
+				<img src="img/0.jpg"/>
+			</li>
+			<li>
+				<img src="img/0.jpg"/>
+				<img src="img/0.jpg"/>
+			</li>
+			<li>
+				<img src="img/0.jpg"/>
+				<img src="img/0.jpg"/>
+			</li>
+			<li>
+				<img src="img/0.jpg"/>
+				<img src="img/0.jpg"/>
+			</li>
+		</ul>
+		
+		<script type="text/javascript">
+			var aLi=document.getElementById('list').getElementsByTagName('li');
+			var dIndex=0;
+			var t1=new Date();
+			var h1=add0(t1.getHours());
+			var m1=add0(t1.getMinutes());
+			var s1=add0(t1.getSeconds());
+			var str1=h1+":"+m1+":"+s1;//利用获取到的时分秒，拼接成数字时钟的样式，str是字符串格式
+			var next=0;//表示后一张图片的src
+			
+			//判断是不是要加“0”
+			function add0(n){
+				return n<10 ? "0"+n : ""+n ;
+			}
+			
+			function tab(num){	//初始化
+				for(var i=0;i<aLi.length;i++){
+					var aImg=aLi[i].getElementsByTagName('img');
+					if(i==2||i==5){
+						aImg[num].src="img/c.jpg";
+					}else{
+						aImg[num].src="img/"+ str1.charAt(i) +".jpg";
+					}
+				}
+			}
+			tab(0);//初始化
+			
+			setInterval(function(){
+				checkdiffer();
+			},1000)
+			
+			//判断是哪张图片发生了变化，也就是哪个li要运动，也就是说下一秒和这一秒的差别
+			function checkdiffer(){
+				var aLi=document.getElementById('list').getElementsByTagName('li');
+				var t2 = new Date();
+				var h2 = add0(t2.getHours());
+				var m2 = add0(t2.getMinutes());
+				var s2 = add0(t2.getSeconds());
+				var str2=h2+":"+m2+":"+s2;//表示下一秒的状态
+//				console.log(str2);
+//				for(var i=0;i<aLi.length;i++){//给img2初始化
+//					var aImg=aLi[i].getElementsByTagName('img');
+//						if(i==2||i==5){
+//							aImg[1].src="img/c.jpg";
+//						}else{
+//							aImg[1].src="img/"+ str2.charAt(i) +".jpg";
+//						}
+//				}
+				tab(1);
+				var differArr=check(str1,str2);
+//				console.log(differArr);
+				
+				for(var i=0;i<differArr.length;i++){
+//					var dIndex = differArr[i][0];//不同的那个序号
+//					var dBody = differArr[i][1];//不同的内容，img的src
+//					
+//					var Imgs = aLi[dIndex].getElementsByTagName('img');
+//					Imgs[1].src="img/"+dBody+".jpg";
+//						
+//					move (aLi[dIndex],{"top":-70},500,function(){//回调函数
+//						aLi[dIndex].style.top=0;//回调函数是要在运动完成之后执行，
+//也就是要在半秒之后，此时的i是for循环完成之后最终的i的值，也就是differArr.length-1；
+//i会影响dIndex，所以li会跳不回来；或者写成全部li都调回0；
+//						Imgs[0].src="img/"+dBody+".jpg";
+//					});
+
+					go(differArr[i][0],differArr[i][1]);
+					
+				}
+				str1=str2;//每次都讲最新的str2 赋值给str1，之后在从头比较一遍
+			}
+			function go(dIndex,dBody){
+				var Imgs = aLi[dIndex].getElementsByTagName('img');
+				Imgs[1].src="img/"+dBody+".jpg";
+					
+				move (aLi[dIndex],{"top":-70},500,function(){//回调函数
+					aLi[dIndex].style.top=0;
+					Imgs[0].src="img/"+dBody+".jpg";
+				});
+			}
+			
+			function check(a,b){//找不同，a和b 分别代表str1 和 str2
+				var arr=[];//存放是第几个不同以及不同的具体内容
+				for(var i=0;i<aLi.length;i++){
+					if(a.charAt(i) != (b.charAt(i))){//如果有不同
+						arr.push( [i,b.charAt(i)] );//i表示的是第几个li里的img有不同，
+										//将i和下一秒的那张不同的图片，一起存在arr数组中
+					}
+				}
+				return arr;
+			}
+						
+			function move (obj,object1,duration,fn) {
+		    	var startTime = new Date();
+		    	var d = duration;
+		    	var j = {};
+		    	for( var a in object1){
+		    		j[a] = {};
+		    		j[a].b = parseFloat(getComputedStyle(obj)[a]);
+		    		j[a].c = object1[a] - j[a].b; 
+		    	}
+//		    	console.log( j );
+		    	obj.timer = setInterval(function(){
+		    		
+		    		var t = new Date() - startTime;
+		    		if(t>=d){
+		    			t = d;
+		    		}
+		    		for(var a in j){
+		    			var c = j[a].c;
+		    			var b = j[a].b;
+						var v = c/d*t+b;
+		    			if(a == "opacity"){
+		    				obj.style[a] = v ;
+		    			}else{
+		    				obj.style[a] = v + "px";
+		    			}
+		    		}
+		    		if(t==d){
+		    			clearInterval(obj.timer);
+		    			fn&&fn();
+		    		}
+		    	},16)
+		    }
+		</script>
+	</body>
+</html>

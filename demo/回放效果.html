@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body{
+				margin:0;
+				padding:0;
+			}
+			#box{
+				width:100px;
+				height:100px;
+				line-height: 100px;
+				text-align: center;
+				background-color:red;
+				position: absolute;
+				/*left: 50px;
+				top: 50px;*/
+			}
+		</style>
+	</head>
+	<body>
+		<input type="button" id="btn" value="magic" />
+		<div id="box">飞的更高~</div>
+		<script>
+		  var box=document.getElementById("box");
+		  var maxL=window.innerWidth - box.offsetWidth;//页面可视区域的宽度-box的可视宽度=box的left能达到的最大值
+		  var maxT=window.innerHeight - box.offsetHeight;//页面可视区域的高度-box的可视高度=box的top能达到的最大值
+		  var arr=[];//用来存放box的left和top
+		  var timer=null;
+//		  arr=[
+//		  		[left0, top0 ],
+//		  		[left1, top1 ],
+//		  		[left2, top2 ],
+//		 	 ]
+		  box.onmousedown=function(e){
+		  	var disX=e.clientX-box.offsetLeft;
+		  	var disY=e.clientY-box.offsetTop;
+		  	
+		  	arr=[ [box.offsetLeft, box.offsetTop] ];
+		  	
+		  	document.onmousemove=function(e){
+		  		var L=e.clientX-disX;//box移动的left
+		  		var T=e.clientY-disY;//box移动的top
+		  		if( L < 0 ){
+		  			L = 0;
+		  		}else if(L > maxL){
+		  			L = maxL;
+		  		}
+		  		
+		  		if( T < 0 ){
+		  			T = 0;
+		  		}else if( T > maxT ){
+		  			T=maxT;
+		  		}
+		  		
+		  		box.style.left=L+"px";
+		  		box.style.top=T+"px";
+		  		
+		  		arr.unshift( [ L, T ] );//在数组的头部添加元素，记录位置，避免之后还要反转位置
+		  	}
+		  	document.onmouseup=function(){
+		  		document.onmousemove=null;
+		  	}
+		  	return false;//阻止浏览器默认行为
+		  }
+		  
+		  btn.onclick=function(e){//从数组重获取位置
+		  	if(arr.length==0){
+		  		return;
+		  	}
+		  	var num=0;
+		  	timer = setInterval(function(){
+		  		box.style.left=arr[num][0]+"px";
+		  		box.style.top=arr[num][1]+"px";
+		  		num++;
+		  		if(num==arr.length){
+		  			clearInterval(timer);
+		  		}
+		  	},10)
+		  	
+//		  	e.cancelBubble=true;//阻止冒泡
+		  }
+		</script>
+	</body>
+</html>

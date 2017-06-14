@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			ul{list-style: none;}
+			#list ul{display: none;}
+		</style>
+	</head>
+	<body>
+		<ul id="list">
+			<li>
+				<h2>+第一级</h2>
+				<ul>
+					<li>
+						<h2>+第二级</h2>
+						<ul>
+							<li>
+								<h2>+第三级</h2>
+								<ul>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h2>第三级</h2>
+							</li>
+							<li>
+								<h2>第三级</h2>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<h2>+第二级</h2>
+						<ul>
+							<li>
+								<h2>+第三级</h2>
+								<ul>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h2>第三级</h2>
+							</li>
+							<li>
+								<h2>第三级</h2>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<h2>第二级</h2>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<h2>+第一级</h2>
+				<ul>
+					<li>
+						<h2>+第二级</h2>
+						<ul>
+							<li>
+								<h2>+第三级</h2>
+								<ul>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h2>第三级</h2>
+							</li>
+							<li>
+								<h2>第三级</h2>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<h2>第二级</h2>
+					</li>
+					<li>
+						<h2>第二级</h2>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<h2>+第一级</h2>
+				<ul>
+					<li>
+						<h2>+第二级</h2>
+						<ul>
+							<li>
+								<h2>+第三级</h2>
+								<ul>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h2>+第三级</h2>
+								<ul>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h2>第三级</h2>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<h2>第二级</h2>
+					</li>
+					<li>
+						<h2>第二级</h2>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<h2>+第一级</h2>
+				<ul>
+					<li>
+						<h2>+第二级</h2>
+						<ul>
+							<li>
+								<h2>+第三级</h2>
+								<ul>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h2>+第三级</h2>
+								<ul>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+									<li>
+										<h2>第四级</h2>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h2>第三级</h2>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<h2>第二级</h2>
+					</li>
+					<li>
+						<h2>第二级</h2>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		
+		<script type="text/javascript">
+			var oList=document.getElementById("list");
+			var aH2=oList.getElementsByTagName("h2");
+			
+			for(var i=0;i<aH2.length;i++){
+				aH2[i].onOff=true;//表示收起状态
+				aH2[i].onclick=function(){	
+					if(this.nextElementSibling){
+						if(this.onOff){//当前是收起的状态，点击后展开
+							
+							closeBrother(this);//清空所有状态，之后在给当前点击添加状态
+							
+							this.style.background="red";
+							this.nextElementSibling.style.display="block";
+							this.onOff=false;
+							
+						}else{//当前是展开的状态，点击之后收起来，包括它的所有子级元素状态都要取消
+							closeChild(this);
+						}
+					}
+				console.log(aH2[0].onOff,aH2[1].onOff,aH2[2].onOff,aH2[3].onOff,aH2[4].onOff,aH2[5].onOff)
+				}
+			}
+			
+			function closeChild(obj){//父子级之间的切换
+				//获取当前obj的父级li里面的所有子级h2，也包括obj自己
+				var h2s=obj.parentNode.getElementsByTagName('h2');
+				for(var i=0;i<h2s.length;i++){
+					if(h2s[i].nextElementSibling){
+						h2s[i].style.background="";
+						h2s[i].nextElementSibling.style.display="none";
+						h2s[i].onOff=true;
+					}
+				}
+			}
+			
+			function closeBrother(obj){//同级之间的切换,包括它自己，利用的是全部清空之后，再添加状态
+				
+				//获取当前obj的父级li的父级ul里面的所有h2，包括obj自己
+				var ah2s=obj.parentNode.parentNode.getElementsByTagName('h2');
+				for(var i=0;i<ah2s.length;i++){//清空所有状态
+					if(ah2s[i].nextElementSibling){
+						ah2s[i].style.background="";
+						ah2s[i].nextElementSibling.style.display="none";
+						ah2s[i].onOff=true;
+						
+					}
+				}
+				
+			}
+			
+		</script>
+		
+	</body>
+</html>

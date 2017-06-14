@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<img src="img/0.jpg" alt="" />
+		<img src="img/0.jpg" alt="" />
+		<img src="img/c.jpg" alt="" />
+		<img src="img/0.jpg" alt="" />
+		<img src="img/0.jpg" alt="" />
+		<img src="img/c.jpg" alt="" />
+		<img src="img/0.jpg" alt="" />
+		<img src="img/0.jpg" alt="" />
+		
+		<script>
+			var imgs = document.getElementsByTagName("img");
+			
+			function add0(n){//0-9时拼接字符串0,这里的n是    t.getHours()、t.getMinutes()、t.getSeconds()得到的数
+				if(n<10){
+					return "0"+n;
+				}else{
+					return ""+n;
+				}
+			}
+			
+			
+			function tab(){//初始化
+				var t = new Date();//获取当前时间
+	//			console.log(t);
+				var h = add0(t.getHours());//获取小时 数字，并判断是不是在0-9之间，是否要拼接字符串“0”
+				var m = add0(t.getMinutes());//获取分钟
+				var s = add0(t.getSeconds());//获取秒
+				var str=h+":"+m+":"+s;//拼成数字时钟的样式,字符串格式
+	//			console.log(str);
+	//			console.log(str.charAt(2));
+				for(var i=0;i<imgs.length;i++){
+					if(i==2||i==5){
+						imgs[i].src="img/c.jpg";
+					}else{
+						imgs[i].src="img/"+str.charAt(i)+".jpg";
+					}
+				}
+			}
+			tab();
+			setInterval(function(){//每1s钟执行一次
+				tab();
+			},1000)	
+			
+			var onOff=true;	//切换中间的“ : ”  每0.5s钟执行一次
+			setInterval(function(){
+				onOff=!onOff;
+				if(onOff){
+					imgs[2].src="img/c.jpg";
+					imgs[5].src="img/c.jpg";
+				}else{
+					imgs[2].src="img/b.jpg";
+					imgs[5].src="img/b.jpg";
+				}
+//				console.log(onOff);
+			},500)
+			
+			
+		</script>
+	</body>
+</html>

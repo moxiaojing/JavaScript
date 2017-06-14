@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+		ul{
+			list-style: none;
+			margin:0;
+			padding:0;
+		}
+		img{
+			vertical-align: top;
+			border:none;
+		}
+		a{
+			text-decoration: none;
+		}
+		#wrap{
+			position:relative;
+			width:300px;
+			height:200px;
+			overflow: hidden;
+		}
+		
+		.img_list {
+			width:1500px;
+			border:1px solid #000;
+			position:absolute;
+			/*left:-300px;*/
+			left:0;
+			top:0;
+		}
+		#wrap .img_list li{
+			width:300px;
+			height:200px;
+			float:left;
+		}
+		#wrap .img_list li img{
+			width:100%;
+			height: 100%;
+		}
+		.YD{
+			height:30px;
+			position:absolute;
+			bottom: 0;
+			left:100px;
+		}
+		.YD li{
+			width:20px;
+			height:20px;
+			border-radius: 50%;
+			background: #EFBD00;
+			float:left;
+			margin-right:10px;
+		}
+		.YD .hover{
+			background: #EE7700;
+		}
+		.YD .active{
+			background: #EC3737;
+		}
+		#prev{
+			width:30px;
+			height:30px;
+			background: #B9B8BD;
+			position:absolute;
+			line-height:30px;
+			font-size:20px;
+			text-align: center;
+			left:0;
+			top:100px;
+			color:#fff;
+		}
+		#next{
+			width:30px;
+			height:30px;
+			line-height:30px;
+			font-size:20px;
+			text-align: center;
+			background: #B9B8BD;
+			position:absolute;
+			top:100px;
+			right:0;
+			color:#fff;
+		}
+		</style>
+		<script src ="jquery-3.1.1.min.js"></script>
+	</head>
+	<body>
+		<div id="wrap">
+			
+			<ul class="img_list">
+				<li>
+					<img src="img/1.jpg"/>
+				</li>
+				<li>
+					<img src="img/2.jpg"/>
+				</li>
+				<li>
+					<img src="img/3.jpg"/>
+				</li>
+				<li>
+					<img src="img/4.jpg"/>
+				</li>
+				<li>
+					<img src="img/1.jpg"/>
+				</li>
+			</ul>
+			
+			<ul class="YD">
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+			
+			<a id="prev" href="javascript:"> < </a>
+			<a id="next" href="javascript:"> > </a>
+		</div>
+		<script>
+			
+			var num = 0;//表示ul应该移动多少个300的长度
+			var thisImg = 0;//表示当前显示的img的index
+			
+			
+			$(".YD li").eq(0).addClass("active");
+			
+			$("#prev").on("click",function(){//上一张
+				
+				//判断是不是正在运动，如果是运动状态，那就直接return
+				if( $(".img_list").is(":animated") ){
+					return;	
+				}
+				
+				num--;
+				//num=0和num=length-1时候，显示的图片是一样的
+				
+				//如果num是0，表示点击后要显示最后一张图片，所以，让num=length-1，left直接变成复制的那张图片的位置处
+				if( num === -1 ){
+					num = $(".img_list li").length-1;//此时num=4
+					$(".img_list").css("left",-300*num);
+					num--;
+					
+				}
+				
+				$(".YD li").removeClass("active");//清空全部class
+				$(".YD li").eq(num).addClass("active");
+				
+				$(".img_list").animate({"left":-300*num},400,function(){
+					
+					thisImg = num;
+					console.log(thisImg);
+				});//此时num最大=3
+				
+			})
+			
+			
+			$("#next").on("click",function(){//下一张
+				
+				//判断是不是正在运动，如果是运动状态，那就直接return
+				if( $(".img_list").is(":animated") ){
+					return;	
+				}
+				//如果num是length-1时候，即是在显示那张复制图片，让left值变成0，图片也不会变
+				
+				num++;
+				
+				$(".YD li").removeClass("active");//清空全部class
+				
+				if(num === $(".img_list li").length-1){//如果是最后一张，就让小圆圈显示第一个
+					$(".YD li").eq(0).addClass("active");
+				}
+				
+				if( num !== $(".img_list li").length-1 ){//如果是不是最后一张，就让小圆圈对应显示
+					$(".YD li").eq(num).addClass("active");
+				}
+				
+				
+				$(".img_list").animate({"left":-300*num},400,function(){
+					
+					if(num === $(".img_list li").length-1){
+						$(".img_list").css("left",0);
+						num=0;
+					}
+					
+					thisImg = num;
+					console.log(thisImg);
+				});
+				
+			})
+						
+			$(".YD li").hover(
+				function(){
+					$(this).addClass("hover");
+				},
+				function(){
+					$(this).removeClass("hover");
+				}
+			)
+			
+			$(".YD li").on("mouseover",function(){
+				
+				
+				var index = $(this).index();//获取索引值
+				
+				// thisImg 表示当前显示的img
+				
+				var thisImg_src = $(".img_list li").eq( thisImg ).html();//当前显示这张图片
+				var prev_img_src = $(".img_list li").eq( index-1 ).html();//点击那张图片的前面一张图片
+				var next_img_src = $(".img_list li").eq( index+1 ).html();//点击那张图片的后面面一张图片
+				
+				//点击的index对应的图片 在当前显示图片的后面，并且中间间隔多张图片
+				if( index - thisImg > 1 ){
+					
+					//index-1 表示点击index对应图片的前面一张
+					$(".img_list li").eq( index-1 ).html( thisImg_src );//将前面一张图片换成当前这张图片
+					
+					$(".img_list").css( "left",-300*( index-1 ) );//主动将图片位置拉到 点击index对应图片的前面一张的位置
+					
+				}
+				
+				//点击的index对应的图片 在当前显示图片的前面，并且中间间隔多张图片
+				if( thisImg- index > 1 ){
+					
+					
+					$(".img_list li").eq( index+1 ).html( thisImg_src );//将前面一张图片换成当前这张图片
+					
+					$(".img_list").css( "left",-300*( index+1 ) );//主动将图片位置拉到 点击index对应图片的前面一张的位置
+					
+				}
+
+				$(".YD li").removeClass("active");//清空全部class
+				
+				$(this).addClass("active");
+				
+				$(".img_list:not(:animated)").animate({"left":-300*index},400,function(){
+					$(".img_list li").eq( index-1).html(prev_img_src);//完成之后，将上一张图片再变回来
+					$(".img_list li").eq( index+1).html(next_img_src);//完成之后，将后一张图片再变回来
+					thisImg = index;//动画完成之后，将index赋值给thisImg，表示，当前显示的图片
+				});
+			})
+			
+			
+			
+		</script>
+	</body>
+</html>

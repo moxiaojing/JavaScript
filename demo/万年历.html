@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+		
+			a{
+				text-decoration: none;
+				color: #000000;
+			}
+			
+			#box{
+				width: 700px;
+				margin: 100px auto;
+				padding: 5px 0;
+			}
+			
+			ul{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				overflow: hidden;
+			}
+			li{
+				float: left;
+				width: 100px;
+				height: 50px;
+				text-align: center;
+				font: 24px/50px arial;			
+				box-sizing: border-box;
+			}
+			#years,#today{
+				height: 50px;
+				text-align: center;
+				font: 24px/50px arial;
+			}
+			.top{
+				margin-top: 20px;
+				position: relative;
+				text-align: center;
+			}
+			
+			#today{
+				display: inline-block;
+				color:  #ADFF2F;
+				font-family: "微软雅黑";
+				margin-bottom: 10px;
+			}
+			#today:hover{
+				color: gold;
+				text-decoration: underline;
+			}
+			#last,#next{
+				width: 30px;
+				height: 30px;
+				font: bold 30px/30px arial;
+				position: absolute;
+				bottom: 10px;
+				margin-top: -10px;
+			}
+			#last{
+				left: 205px;
+			}
+			#next{
+				right: 195px;
+			}
+			.top a:hover{
+				color: gold;
+			}
+			
+			#week li{
+				
+				border-right: 1px solid #fff;
+			}
+			#week{
+				border-bottom: 1px solid #000;
+				margin-bottom: 20px;
+				margin-top: 20px;
+			}
+			#date li{
+				background: #FFFFFF;
+			}
+			#date li.active{
+				background: greenyellow;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<div id="box">
+			<div class="top">
+				<a href="javascript:;" title="转到今天" id="today">转到今天</a>
+				<div id="years"></div>
+				<a id="last" href="javascript:;">◀</a>
+				<a id="next" href="javascript:;">▶</a>
+			</div>
+			<ul id="week">
+				<li>星期日</li>
+				<li>星期一</li>
+				<li>星期二</li>
+				<li>星期三</li>
+				<li>星期四</li>
+				<li>星期五</li>
+				<li>星期六</li>
+			</ul>
+			
+			<ul id="date">
+				
+				
+			</ul>			
+		</div>
+		
+		
+		<script type="text/javascript">
+			
+			var weekBox = document.getElementById("week");
+			
+			var dateBox = document.getElementById("date");
+			
+			var yearsBox = document.getElementById("years");
+			var todayDate = document.getElementById("today");
+			var nextM = document.getElementById("next");
+			var lastM = document.getElementById("last");
+			var dateNow = dateBox.getElementsByTagName("li");
+			
+			var str = "";
+			var n = 0;
+// 			思路：首先要知道这个月的第一天是周几，才可以确定 1号 的位置，然后要获取这个月有多少天，才能确定要生成的 li的长度。 li的长度需要包含 1号 前面空出来的 几个站位li			
+			
+			//获取月份
+			
+			function getTimes(){
+				var today = new Date();
+				today.setDate(1);//设置今天为 1号
+
+				//获取这个月
+				var tMonth = today.getMonth();
+				var tyear = today.getFullYear();
+//				if( tMonth < 0 ){
+//					tMonth =11;
+//				}
+				//通过n值得加减来获取以前或者以后的日历，默认状态 n为零 日历为当前时间
+				tMonth += n;
+
+				today.setMonth(tMonth);
+				//alert(today.getFullYear()+"年"+  (today.getMonth()+1) +"月");
+				
+				var week = today.getDay();//从今天获取 星期
+				tMonth++; //这只是获取一个数字
+//				alert(tMonth)
+				//n++的时候，如果tMonth超出12则 年份会增加两年 ，所以需要设置tMonth为 0~11
+				if( tMonth>12  ){
+					tMonth %=12;
+				}
+				//n--的时候，如果tMonth小于0 年份会减少两年 
+				if( tMonth <= 0 ){
+					
+					tMonth = tMonth%12 + 12;
+				}
+				
+				today.setMonth(tMonth); //月份设置为下一个月
+
+				today.setDate(0);//设置日期为下一个月第0天，也就是 这个月的最后一天
+				//alert(today.getFullYear()+"年"+  (today.getMonth()+1) +"月");
+				var monthLength = today.getDate();//获取到这个月的天数
+				for (var i = 0; i <(monthLength+week); i++) {
+					if( i < week ){
+						
+						str += " <li> </li>";
+						
+					} else{
+						str += " <li>"+ (i-week+1) +"</li> ";
+					}
+	
+				}
+				dateBox.innerHTML = str;			
+				
+				yearsBox.innerHTML += today.getFullYear()+"年"+ (today.getMonth()+1) +"月";	
+				var now = new Date();// 获取当前时间
+				
+				//给今天加 classname
+				if( now.getMonth()==today.getMonth() ){//先判断 下面日历是否是当前月份
+					dateNow[now.getDate()-1+week].className = "active";	
+				}else{
+					dateNow[week].className = "active"; //如果不是 给那个月的第一天加classname
+				}
+				
+				todayDate.innerHTML = now.getFullYear()+"年"+ (now.getMonth()+1) +"月"+ now.getDate()+"日";
+					
+			}
+
+			getTimes();
+			
+			console.log(nextM);
+			nextM.onclick = function(){
+				str = "";
+				yearsBox.innerHTML = "";
+				//console.log(1);	
+				n++;
+				
+				getTimes();
+			}
+			lastM.onclick = function(){
+				str = "";
+				yearsBox.innerHTML = "";
+				//console.log(1);	
+				n--;
+				
+				getTimes();
+			}
+			
+			todayDate.onclick =function(){
+				str = "";
+				yearsBox.innerHTML = "";	
+				n = 0;
+				
+				getTimes();
+			}
+			 
+			
+		</script>
+	</body>
+</html>

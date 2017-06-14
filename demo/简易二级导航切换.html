@@ -1,0 +1,216 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style type="text/css">
+	
+	a{
+		text-decoration: none;
+		color:white;
+		width: 70px;
+		display: block;
+		text-align: center;
+	}
+	
+	#nav{
+		width: 100%;
+		position: relative;
+		margin: 0;
+		padding: 0;
+		height: 70px;
+	}
+	#nav>li{
+		border-right: 1px solid #ccc;
+		background-color: black;
+		float: left;
+		line-height: 30px;
+		height: 30px;
+		list-style: none;
+	}
+	#nav>li.active,#nav>li>a.active{
+		background-color: red;
+		border-right-color:red;
+	}
+	#nav div{
+		position: absolute;
+		top:50px;
+		left: 0px;
+		width: 850px;
+		background-color: red;
+		text-align: center;
+		color:white;
+		display: none;
+	}
+	#nav div a{
+		float: left;
+		width: 80px;
+		padding: 0 10px 0;
+		line-height: 40px;
+	}
+	#nav div a:hover{
+		text-decoration: underline;
+		cursor: pointer;
+	}
+	#nav .active div{
+		display: block;
+	}
+	#banner{
+		display: block;
+		width: 850px;
+	}
+</style>
+</head>
+
+<body>
+	<ul id="nav">
+		<li class="active">
+			<a href="javascript:;">首页</a>
+			
+		</li>
+		<li>
+			<a href="javascript:;">服饰</a>
+			<div>
+				<a href="javascript:;">流行</a>
+				<a href="javascript:;">秀场</a>
+				<a href="javascript:;">搭配</a>
+				<a href="javascript:;">街拍</a>
+				<a href="javascript:;">配饰</a>
+			</div>
+		</li>
+		<li>
+			<a href="javascript:;">美容</a>
+			<div>
+				<a href="javascript:;">新品试用</a>
+				<a href="javascript:;">美丽奇迹</a>
+				<a href="javascript:;">美肌榜样</a>
+				<a href="javascript:;">护肤</a>
+				<a href="javascript:;">彩妆</a>
+			</div>
+		</li>
+		<li>
+			<a href="javascript:;">偶像</a>
+			<div>
+				<a href="javascript:;">做范儿</a>
+				<a href="javascript:;">最佳穿衣</a>
+				<a href="javascript:;">红毯礼服</a>
+				<a href="javascript:;">日妆造型</a>
+				<a href="javascript:;">星妆时刻</a>
+			</div>
+		</li>
+		<li>
+			<a href="javascript:;">乐活</a>
+			<div>
+				<a href="javascript:;">视线</a>
+				<a href="javascript:;">玩乐时光</a>
+				<a href="javascript:;">旅行</a>
+				<a href="javascript:;">吃痴哲学</a>
+				<a href="javascript:;">潮流眼</a>
+			</div>
+		</li>
+		<li>
+			<a href="javascript:;">男士</a>
+			
+		</li>
+		<li>
+			<a href="javascript:;">健康</a>
+			
+		</li>
+		<li>
+			<a href="javascript:;">视觉</a>
+			<div>
+				<a href="javascript:;">有图有真</a>
+				<a href="javascript:;">吐槽</a>
+				<a href="javascript:;">惊艳</a>
+				<a href="javascript:;">图片站</a>
+				<a href="javascript:;">然并卵</a>
+			</div>
+		</li>
+		<li>
+			<a href="javascript:;">活动</a>
+			<div>
+				<a href="javascript:;">玩乐时光</a>
+				<a href="javascript:;">视线</a>
+				<a href="javascript:;">旅行</a>
+				<a href="javascript:;">吃痴哲学</a>
+				<a href="javascript:;">潮流眼</a>
+			</div>
+		</li>
+		<li>
+			<a href="javascript:;">专题</a>
+			<div>
+				<a href="javascript:;">视线</a>
+				<a href="javascript:;">玩乐时光</a>
+				<a href="javascript:;">旅行</a>
+				<a href="javascript:;">吃痴哲学</a>
+				<a href="javascript:;">潮流眼</a>
+			</div>
+		</li>
+		<li>
+			<a href="javascript:;">分享</a>
+			<div>
+				<a href="javascript:;">新浪微博</a>
+				<a href="javascript:;">微信</a>
+				
+			</div>
+		</li>
+		<li>
+			<a href="javascript:;">流行</a>
+			<div>
+				<a href="javascript:;">视线</a>
+				<a href="javascript:;">玩乐时光</a>
+				<a href="javascript:;">旅行</a>
+				<a href="javascript:;">吃痴哲学</a>
+				<a href="javascript:;">潮流眼</a>
+			</div>
+		</li>
+	</ul>
+	
+	<script>
+		var oNav=document.getElementById('nav');
+		var aLi=document.getElementsByTagName('li');
+		
+		for( var i=1;i<aLi.length;i++){
+			Tab(i);
+		}
+		function Tab(n){
+			var aDiv=aLi[n].getElementsByTagName('div')[0];//导航li里面的二级导航div
+			var timer=null;
+			
+			aLi[n].onmouseover=function(){//li的鼠标移入事件
+				
+				clearTimeout(timer);//先清除定时器
+				
+				for(var i=1;i<aLi.length;i++){//li事件全部清空
+					aLi[i].className="";
+				}
+				
+				this.className="active";
+//				if(aDiv){
+//					aDiv.style.display="block";
+//				}
+				
+			}
+			
+			aLi[n].onmouseout=function(){//li的鼠标移入事件
+				
+//				clearTimeout(timer);
+//				aLi[n].className="";
+				
+				timer=setTimeout(function(){
+					aLi[n].className="";
+//					if(aDiv){
+//						aDiv.style.display="none";
+//					}
+				},1000)
+			}
+//			
+//			aDiv.onmouseover=function(){//li中的二级菜单div的鼠标移入事件
+//				clearTimeout(timer);
+//				aLi[n].className="active";
+//			}
+
+		}
+	</script>
+</body>
+</html>

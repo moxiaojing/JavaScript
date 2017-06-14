@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+</head>
+
+<body>
+
+	<ul id="list">
+		<li>
+		  	<input type="button" value="-" />
+		    <strong>0</strong>
+		  	<input type="button" value="+" />
+			    单价：<em>12.5元</em>
+			    小计：<span>0元</span>
+	    </li>
+		<li>
+		  	<input type="button" value="-" />
+		    <strong>0</strong>
+		  	<input type="button" value="+" />
+			    单价：<em>10.5元</em>
+			    小计：<span>0元</span>
+	 	</li>
+		<li>
+		  	<input type="button" value="-" />
+		    <strong>0</strong>
+		  	<input type="button" value="+" />
+			    单价：<em>8.5元</em>
+			    小计：<span>0元</span>
+	  	</li>
+		<li>
+		  	<input type="button" value="-" />
+		    <strong>0</strong>
+		  	<input type="button" value="+" />
+			    单价：<em>8元</em>
+			    小计：<span>0元</span>
+	 	</li>
+		<li>
+		  	<input type="button" value="-" />
+		    <strong>0</strong>
+		  	<input type="button" value="+" />
+			    单价：<em>14.5元</em>
+			    小计：<span>0元</span>
+	  	</li>
+	</ul>
+
+	<p>
+		商品合计共: 0件，共花费了：0元<br />
+		其中最贵的商品单价是：0元
+	</p>
+
+</body>
+
+	<script>
+		
+		var oUl=document.getElementById("list");
+		var aLi=oUl.getElementsByTagName("li");
+		var oP=document.getElementsByTagName("p")[0];
+		var aStrong=document.getElementsByTagName("strong");//全局变量，数量
+		var aSpan=document.getElementsByTagName("span");//全局变量，小计
+		var oEm=document.getElementsByTagName("em");//全局变量，单价
+		var oAddNumber=0;//全局变量，总件数
+		var oAddPrice=0;//全局变量，总钱数
+//		var a=0;
+//		var b=0;
+		var max=0;
+		//定义初始化函数，参数是n，表示n个li
+		function Tab(n){
+			
+			var num=0;
+			//获取第n个li里的input
+			var oMinus=aLi[n].getElementsByTagName("input")[0];
+			var oPlus=aLi[n].getElementsByTagName("input")[1];
+			var oNumber=aLi[n].getElementsByTagName("strong")[0];
+			var oSum=aLi[n].getElementsByTagName("span")[0];
+			var oUnitPrice=aLi[n].getElementsByTagName("em")[0];
+			
+			//增加
+			oPlus.onclick=function(){
+//				a=0;//用来比较大小
+//				b=0;//用来装最大的数字
+				max=0;//用来装单价中最大的数字
+				num++;
+				oNumber.innerHTML=num;
+				oSum.innerHTML=num*(parseFloat(oUnitPrice.innerHTML))+"元";
+				
+				//获取件数
+				oAddNumber=0;
+				oAddPrice=0;
+				
+				//点击时，需要计算所有的数量或小计，所以要for循环，找到每一个，之后求和或比较
+				for(var i=0;i<aLi.length;i++){
+					
+					//总件数
+					oAddNumber += parseFloat(aStrong[i].innerHTML);
+					
+					//总钱数
+					oAddPrice+=parseFloat(aSpan[i].innerHTML);
+					
+					//返回小计中最大的那种商品的单价
+//					if(a<parseFloat(aSpan[i].innerHTML)){//a和每一个小计作比较，如果a小于小计，那么把小计的值，传给a
+//						a=parseFloat(aSpan[i].innerHTML);
+//						b=parseFloat(oEm[i].innerHTML);//b=此时的单价
+//					}
+//					console.log(oEm[i].innerHTML);
+					
+					//购买商品中最大单价
+					if(parseInt(aStrong[i].innerHTML) > 0){//当数量不是0的时候，进行比较
+						if(max < parseFloat(oEm[i].innerHTML)){
+							max = parseFloat(oEm[i].innerHTML);
+						}
+					}
+					
+					
+				}
+				
+					oP.innerHTML="商品合计共："+oAddNumber+"件，共花费了："+oAddPrice+"元<br />其中最贵的商品单价是："+max+"元";
+					
+			}
+			
+			
+			//减少
+			oMinus.onclick=function(){
+//				a=0;//用来比较大小
+//				b=0;//用来装最大的数字
+				max=0;//用来装单价中最大的数字
+				num--;
+				if(num<0){
+					num=0;
+				}
+				oNumber.innerHTML=num;
+//				alert(parseFloat(oUnitPrice.innerHTML));
+				oSum.innerHTML=parseFloat(oUnitPrice.innerHTML)*num+"元";
+				
+				//获取件数	
+				oAddNumber=0;//每次点击时先将
+				oAddPrice=0;
+				
+				//点击时，需要计算所有的数量或小计，所以要for循环，找到每一个，之后求和或比较
+				for(var i=0;i<aLi.length;i++){
+					
+					//总件数
+					oAddNumber += parseFloat(aStrong[i].innerHTML);
+					
+					//总钱数
+					oAddPrice+=parseFloat(aSpan[i].innerHTML);
+					
+					//单价最大值
+//					if(a<parseFloat(aSpan[i].innerHTML)){//a和每一个小计作比较，如果a小于小计，那么把小计的值，传给a
+//						a=parseFloat(aSpan[i].innerHTML);
+//						b=parseFloat(oEm[i].innerHTML);//b=此时的单价
+//					}
+//					console.log(oEm[i].innerHTML);
+
+
+
+					//购买商品中最大单价
+					if(parseInt(aStrong[i].innerHTML) > 0){//当数量不是0的时候，进行比较
+						if(max < parseFloat(oEm[i].innerHTML)){
+							max = parseFloat(oEm[i].innerHTML);
+						}
+					}
+				}
+				
+				
+				oP.innerHTML="商品合计共:"+oAddNumber+"件，共花费了："+oAddPrice+"元<br />其中最贵的商品单价是："+max+"元";
+			}
+			
+			
+		}	
+		//给每一个li调用封装好的函数
+		for(var i=0;i<aLi.length;i++){
+			Tab(i);
+			
+		}
+		
+		
+		
+	</script>
+</html>

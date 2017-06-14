@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			clearfix:after{
+				content:"";
+				clear:both;
+				display:block;
+			}
+			.left{
+				float:left;
+			}
+			ul{
+				padding:0;		
+				margin:0;
+				list-style: none;
+			}
+			img{
+				border:none;
+				vertical-align: top;
+				width:240px;
+				height:260px;
+			}
+			#item{
+				width:100px;
+			}
+			#item div{
+				height:100px;
+				line-height:100px;
+				background:#8C89B6;
+				font-size:22px;
+				font-weight: bold;
+				text-align: center;
+			}
+			#item .active{
+				background:#E5E5E5;
+			}
+			#ul{
+				height:40px;
+			}
+			#ul li{
+				display:none;
+				background: #9FA0A5;
+				box-sizing: border-box;
+				width:240px;
+				height:40px;
+			}
+			
+			#ul .show{
+				display:block;
+			}
+			
+			#ul .show div{
+				display:inline-block;
+				/*margin-right:10px;*/
+				text-align: center;
+				line-height: 40px;
+				height:40px;
+				/*width:60px;*/
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="box" class="clearfix">
+			<!--<div class="left" id="item">
+				<div>女装</div>
+				<div>男装</div>
+				<div>童装</div>
+			</div>
+			<div class="left" id="cont">
+				<img src="img/0.jpg" alt="" />
+				<ul id="ul">
+					<li class="active">
+						<div>女装1</div>
+						<div>女装2</div>
+						<div>女装3</div>
+						<div>女装4</div>
+					</li>
+					<li>
+						<div>男装1</div>
+						<div>男装2</div>
+						<div>男装3</div>
+					</li>
+					<li>
+						<div>童装1</div>
+						<div>童装2</div>
+					</li>
+				</ul>
+			</div>-->
+			
+		</div>
+		<script>
+			var box=document.getElementById('box');
+			var data=[
+						['女装',['牛仔裤','外套','连衣裙','毛衣']],
+						['男装',['T恤','西装','卫衣']],
+						['童装',['宝宝棉衣','宝宝羽绒服']]
+						];
+						
+			var arrImg=[
+						['img/0.jpg','img/1.jpg','img/2.jpg','img/3.jpg'],
+						['img/4.jpg','img/0.jpg','img/1.jpg'],
+						['img/2.jpg','img/3.jpg']
+						];
+						
+			function tab(){//自动生成结构
+				var str="";
+				str+="<div class='left' id='item'>"
+				for(var i=0;i<data.length;i++){
+					if(i==0){
+						str+="<div class='active'>"+data[i][0]+"</div>";
+					}else{
+						str+="<div>"+data[i][0]+"</div>";
+					}
+				}
+				
+				str+="</div><div class='left' id='cont'><img src='img/0.jpg' /><ul id='ul'>";
+				
+				for(var i=0;i<data.length;i++){
+					str+="<li>";
+					for(var j=0; j < data[i][1].length; j++){
+						str += "<div>"+ data[i][1][j] +"</div>";
+					}
+					str+="</li>";
+				}
+				
+				str+="</ul></div>";
+				box.innerHTML=str;
+			}
+			tab();//只是自动生成结构
+			
+			var oItem = document.getElementById('item');
+			var aDiv = document.querySelectorAll('#item div');//表示侧边的每一项
+			var oImg = document.getElementsByTagName('img')[0];
+			var oUl = document.getElementById('ul');//图片下面的信息栏
+			var aLi = document.querySelectorAll('#ul li');
+			var aImgInfo = document.querySelectorAll('.show div');//表示每一个item对应的div
+			var timer = null;
+			var m=0;//表示左侧边栏的item
+			var n=0;//表示item中的每一个li里面的div
+			
+//			for(var i=0;i<data.length;i++){
+//				var aLiw = document.querySelectorAll('#ul li');
+//				aDiv[i].index=i;
+//				aDiv[i].onmouseover=function(){
+//					m=this.index;
+//					n=0;
+//					play(m,n);
+//					clearInterval(timer);
+//				}
+//				aDiv[i].onmouseout=function(){
+//					m=this.index;
+//					play(m,n);
+//					setIntTimer();
+//				}
+//						
+//				for(var j=0;j<(data[i][1]).length;j++){
+//					var aImgInfon = aLiw[i].querySelectorAll('div');//表示每一个item对应的div
+//					aImgInfon[j].index=j;
+//					aImgInfon[j].onmouseover=function(){
+//						n=this.index;
+//						play(m,n);
+//						clearInterval(timer);
+//					}
+//					aImgInfon[j].onmouseout=function(){	
+//						play(m,n);
+//						setIntTimer();
+//					}
+//				}
+//			}
+			play(m,n);//初始化
+			autoplay();
+			
+			box.onmouseout=autoplay;
+			
+			box.onmouseover=function(){
+				clearInterval(timer);
+			}
+			
+			for(var i=0;i<data.length;i++){//左侧所有div的点击事件
+				aDiv[i].index=i;
+				aDiv[i].onclick=function(){
+					m=this.index;
+					n=0;
+					play(m,n);
+				}
+			}
+			for(var i=0;i<data.length;i++){
+				var aLiw = document.querySelectorAll('#ul li');//获取到左侧选中的item对应的右边显示的li
+				for(var j=0;j<(data[i][1].length);j++){
+					var aImgInfo2 = aLiw[i].querySelectorAll('div');//表示显示的li中的div
+					aImgInfo2[j].index=j;
+					aImgInfo2[j].onclick=function(){
+						n=this.index;
+						play(m,n);
+					}
+				}
+			}
+			
+			function play(m,n){
+				//左侧div的状态
+				for(var i=0;i<data.length;i++){
+					aDiv[i].className='';
+					aLi[i].className='';//左侧选中div对应的li要隐藏
+				}//先清空左侧div的className，以及对应的li
+				aDiv[m].className='active';//表示左侧栏选中状态
+				aLi[m].className='show';//左侧选中div对应的li要显示
+				//右侧li里的div的状态
+				for(var i=0;i<data[m][1].length;i++){//li里面的div
+					var aImgInfo = document.querySelectorAll('.show div');//表示每一个item对应的div
+					aImgInfo[i].style.width=240/data[m][1].length+"px";
+					aImgInfo[i].style.backgroundColor="";
+				}
+				aImgInfo[n].style.backgroundColor="pink";
+				oImg.src=arrImg[m][n];
+			}
+			function autoplay(){
+				timer=setInterval(function(){
+					n++;
+					if(n==arrImg[m].length){
+						n=0;
+						m++;
+						if(m==data.length){
+							m=0;
+						}
+					}
+					play(m,n);
+					
+				},1000)
+			}
+			
+			
+		</script>
+		
+	</body>
+</html>
