@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--		
+			创造对象，用大驼峰式命名法，用 new 调用；
+			用 new 调用的对象，在创造时可以省略{},new本身内置，this指向创建的对象，也就是实例
+			
+			function Info(userName,sex){
+				this.userName = userName,
+				this.sex = sex,
+				this.city = "北京"，
+				
+				//this.coding = function(){
+					//console.log("我是公用的coding属性")
+				//}
+				
+				this.coding = Coding;
+			}
+			
+			function Coding(){
+				console.log("我是公用的coding属性")
+			}
+			通过Info这个构造函数构造出来的实例，都具有共同的coding方法和city属性，在构造多个函数时，会导致执行多次
+			coding和city，并且是每个函数私有的方法和属性，并不是共有的
+			
+			
+			
+			可以提出来，放到外面，但是，会造成有很多全局函数，所以一般把共享的属性和方法放到原型（prototype）身上
+			
+			每定义一个函数，都有一个属性，叫 prototype原型--的值是  一个对象
+			
+			Info.prototype.city = "北京"
+			Info.prototype.coding = function(){
+				console.log("我是公用的coding属性")
+			}
+			
+			多个函数，共有的属性和方法是相等的
+			
+			函数1.city === 函数2.city
+			函数1.coding === 函数2.coding
+			
+			
+			每个对象都有一个__proto__
+			__proto__的值指向构造这个实例的构造函数的原型prototype的值
+			
+			函数的构造函数是Function
+		-->
+		
+		<script type="text/javascript">
+		
+			function Info(userName,sex){
+				this.userName = userName,
+				this.sex = sex
+			}
+			
+			
+			//Info.prototype是一个对象，这个对象是Object构造出来的
+			
+			Info.prototype.city = "北京";
+			Info.prototype.coding = function(){
+				
+				console.log("我是共享的coding属性")
+			}
+			
+			var p1 = new Info("小明","男");
+			var p2 = new Info("小红","女");
+			
+			console.log( p1.prototype === p2.prototype )//true
+			console.log( p1 )
+			console.log( p1.__proto__ === Info.prototype );//true
+			
+			//找p1 的 coding这个属性，现在实例自身上找，没有找到的话，就在p1.__proto__对应的原型身上找，如果还找不到，
+			//就在构造这个原型对象的Object身上prototype，还是找不到的话就返回null
+			
+		</script>
+	</body>
+</html>

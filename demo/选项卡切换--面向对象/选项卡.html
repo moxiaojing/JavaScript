@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.active{
+				background:#EFBD00;
+			}
+			p{
+				display:none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box1">
+			<input type="button" value="按钮1" class="active" />
+			<input type="button" value="按钮2" />
+			<input type="button" value="按钮3" />
+			<p style="display: block;">内容一</p>
+			<p>内容二</p>
+			<p>内容三</p>
+		</div>
+		
+		<div id="box2">
+			<input type="button" value="按钮1" />
+			<input type="button" value="按钮2" />
+			<input type="button" value="按钮3" />
+			<p style="display: block;">内容一</p>
+			<p>内容二</p>
+			<p>内容三</p>
+		</div>
+		
+		<input type="button" id="btn1" value="第一组停止播放" />
+		<input type="button" id="btn2" value="第二组开始播放" />
+		<input type="button" value="开始播放所有" id="btn3" />
+		<input type="button" value="停止播放所有" id="btn4" />
+		<input type="button" value="反向播放" id="btn5" />
+		<!--
+			需求：
+			
+			两组按钮都有点击事件，初始化，第一组循环播放，点击btn1之后，第一组停止循环播放，点击btn2之后第二组开始
+		-->
+		<script>
+			
+			function tab( obj ){//构造对象
+				
+				//this指的是实例
+				this.inps = obj.getElementsByTagName("input");
+				this.ps = obj.getElementsByTagName("p");
+				
+				this.num = -1;
+				this.timer = null;//定时器
+				this.init();//调用 初始化
+			}
+			
+			tab.prototype.init = function(){//初始化，给box1和box2中的每个inp添加点击事件
+				
+				var _this = this;
+				
+				for (var i = 0; i < this.inps.length; i++){
+					
+					this.inps[i].index = i;//自定义索引
+					
+					this.inps[i].onclick = function(){
+						//这里的this指向点击的那个inp，_this指向的是构造的对象					
+						_this.play( this.index );
+						
+					}
+					
+				}
+				
+			}
+			//选中效果
+			tab.prototype.play = function( n ){
+				
+				for (var i = 0; i < this.inps.length; i++) {
+					this.inps[i].className="";
+					this.ps[i].style.display="none";
+				}
+				this.inps[n].className="active";
+				this.ps[n].style.display="block";
+				
+			}
+			//自动轮播效果
+			tab.prototype.autoPlay = function( index ){
+				
+				var _this = this;//this指向实例tab
+				this.timer = setInterval(function(){
+					
+					//在定时器中，this表示window，所以不能直接使用this，要用_this，_this指向的是构造的对象	tab
+					
+					_this.num ++ ;
+					_this.num %= _this.inps.length;
+					_this.play( _this.num );
+					
+				},500)
+				
+			}
+			//停止轮播
+			tab.prototype.stop = function( index ){
+				clearInterval( this.timer );//停止定时器
+				this.timer = null;
+			}
+			//是不是轮播状态
+			tab.prototype.isStatus = function(){//表示当时的状态，true表示是轮播状态，false表示没有轮播
+				return !!this.timer;
+			}
+			
+			var box1 = document.getElementById("box1");
+			var box2 = document.getElementById("box2");
+						
+			//面向对象的方式处理
+			var tab1 = new tab(box1);//创建第一个对象
+			var tab2 = new tab(box2);//创建第二个对象
+			
+			tab1.autoPlay();
+			
+			btn1.onclick = function (){//表示第一组停止播放
+				
+				tab1.stop();	
+				
+			}
+
+			btn2.onclick = function (){//表示第二组开始播放
+				if( !tab2.isStatus() ){
+					
+					tab2.autoPlay();
+					
+				}
+			}
+			
+			btn3.onclick = function (){//表示全部开始播放
+				
+				if( !tab1.isStatus() ){//false表示没有轮播
+					
+					tab1.autoPlay();
+					
+				}
+				
+				if( !tab2.isStatus() ){//false表示没有轮播
+					
+					tab2.autoPlay();	
+				}
+			}
+			
+			btn4.onclick = function (){//表示全部停止播放
+				tab1.stop();	
+				tab2.stop();	
+			}
+			
+			btn5.onclick = function (){//交换状态
+				
+				if( tab1.isStatus() ){//true表示当前正在轮播状态
+					
+					tab1.stop();
+					
+				}else{//表示当前没有轮播状态
+					
+					tab1.autoPlay();
+					
+				}
+				
+				if( tab2.isStatus() ){//true表示当前正在轮播状态
+					
+					tab2.stop();
+					
+				}else{//表示没有轮播状态
+					
+					tab2.autoPlay();
+				}
+				
+			}
+			
+			
+		</script>
+	</body>
+</html>

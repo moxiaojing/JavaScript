@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			function Person(name,sex){
+				this.userName = name;
+				this.sex = sex;
+			}
+			Person.prototype.run = function(){
+				console.log("我是人的基本特性")
+			}
+			
+			function Coder(name,sex,money){
+				Person.call( this,name,sex );//用call改变this的指向，并传入参数
+				this.money = money;
+			}
+			
+			Coder.prototype = Person.prototype;
+			Coder.prototype.constructor = Coder;//表示改变成为自己的构造函数
+			
+			Coder.prototype.coding = function (){
+				console.log("我是程序员的特有的行为")
+			}
+			
+			var coder1 = new Coder( "xiaoming","nan",9999 );
+			console.log(coder1)
+			
+			
+			
+			
+			
+			function Singer(name,sex,sing){
+				Person.call( this,name,sex );//用call改变this的指向，并传入参数
+				this.sing = sing;
+			}
+			//我们目的是要   把类的原型对象赋值给Singer的原型对象
+//			Singer.prototype = Person.prototype;//这种写法表示是引用同一个对象，是错误的
+			//用 for in 方法 克隆之后，赋值
+			for( var attr in Person.prototype ){
+				if( Person.prototype.hasOwnProperty( attr ) ){
+					Singer.prototype[attr] = Person.prototype[attr];
+				}
+			}
+
+			Singer.prototype.constructor = Singer;//表示改变成为自己的构造函数
+			
+			Singer.prototype.singing = function (){
+				console.log("我是歌唱家特有的行为")
+			}
+			
+			
+			var Singer = new Singer( "小红","女",100000000 );
+			console.log(Singer)
+			
+		</script>
+	</body>
+</html>
