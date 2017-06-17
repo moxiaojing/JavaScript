@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			
+			//n表示需要随机生成几个整数
+			
+			var min = 2;
+			var max = 8;
+			
+			console.log( randomNum(2,8,3) );
+			
+			function randomNum( max , min , n ){
+				
+				if(!n) return [];
+				if(typeof n !== "number") return [];
+				
+				//返回值是数组
+				var arr = [];
+				
+				for( var i = 0 ; i < n ; i++ ){
+					
+					var num = parseInt( Math.random()*( max - min ) + min ,10);//10表示是十进制
+					
+					if( arr.length > 0 ){//从第二次开始判断
+						
+						if( arr.indexOf(num) === -1 ){//如果arr里面没有num，就放到数组里
+							
+							arr.push( num );
+							
+						}else{//表示和数组重复
+							
+							num = parseInt( Math.random()*( max - min ) + min ,10);//重新生成num
+							
+							indexOfnum( max , min, arr , num );//此处需要用到递归思想
+							
+						}
+						
+					}else{
+						
+						arr.push( num );
+					}
+				}
+				return arr;
+			}
+			
+			function  indexOfnum( max , min, arr , num ){//查看数组中有没有num值
+											
+				if( arr.indexOf(num) === -1 ){//表示arr里面没有num，就放到数组里
+					
+					arr.push( num );
+					
+				}else{//有相同数字
+					
+					num = parseInt( Math.random()*( max - min ) + min ,10);//重新生成num
+					
+					indexOfnum( max , min, arr , num );//递归
+				}
+			}
+			
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
